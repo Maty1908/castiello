@@ -1,61 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gracias por tu pedido</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>¡Gracias por tu compra!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    :root {
-      --color-principal: #e1221c;
-      --color-secundario: #F8DB5E;
-    }
-
     body {
-      background-color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
       text-align: center;
+      padding: 50px;
+      font-family: 'Segoe UI', sans-serif;
     }
-
-    h1 {
-      color: var(--color-principal);
-      font-size: 2.8rem;
-      font-weight: bold;
+    .alias-box {
+      background-color: #fff;
+      border: 2px solid #dc3545;
+      border-radius: 10px;
+      padding: 20px;
+      display: inline-block;
+      margin-top: 30px;
     }
-
-    p {
-      font-size: 1.2rem;
-      color: #333;
-      margin: 1rem 0;
-    }
-
-    .btn-volver {
-      background-color: var(--color-secundario);
-      border: 2px solid var(--color-principal);
-      color: var(--color-principal);
-      padding: 0.75rem 2rem;
-      border-radius: 25px;
-      font-weight: 600;
-      transition: 0.3s;
-      text-decoration: none;
-    }
-
-    .btn-volver:hover {
-      background-color: var(--color-principal);
-      color: #fff;
+    .alias-box h2 {
+      color: #dc3545;
     }
   </style>
 </head>
 <body>
-  <div>
-    <h1>¡Gracias por tu pedido!</h1>
-    <p>Lo estamos procesando y nos comunicaremos a la brevedad.</p>
-    <a href="index.html" class="btn-volver">Volver a la tienda</a>
+  <h1>¡Gracias por tu compra!</h1>
+  <p>Tu pedido fue enviado correctamente.</p>
+
+  <div class="alias-box">
+    <h2>Transferencia</h2>
+    <p><strong>Alias:</strong> mate.castiello.mp</p>
+    <p><strong>Monto a pagar:</strong> $<span id="monto"></span></p>
+    <p>Por favor, enviá el comprobante al correo o WhatsApp.</p>
   </div>
+
+  <a href="inicio.html" class="btn btn-danger mt-4">Volver a la tienda</a>
+
+  <script>
+    // Mostrar monto desde localStorage
+    const monto = localStorage.getItem('montoTotal');
+    document.getElementById('monto').textContent = monto || '...';
+  </script>
 </body>
 </html>

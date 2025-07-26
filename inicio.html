@@ -377,9 +377,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  // Simula datos usuario para demo (reemplazar por login real)
-  // localStorage.setItem('userData', JSON.stringify({name: 'Juan Pérez', email: 'juan@mail.com', address: '123456789'}));
-
   const userDataJSON = localStorage.getItem('userData');
   if (!userDataJSON) {
     window.location.href = 'login.html';
@@ -389,9 +386,33 @@
   const cartList = document.getElementById('cart');
   const totalSpan = document.getElementById('total');
   const metodoPagoInput = document.getElementById('pagoMetodo');
-  let selectedPaymentMethod = 'Transferencia'; // Ahora sí se puede modificar
+  let selectedPaymentMethod = 'Transferencia';
 
-  // Añadir producto al carrito
+  // Función para actualizar el carrito
+  function updateCart() {
+    cartList.innerHTML = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div>${item.name} - ${item.quantity} x $${item.price}</div>
+        <button onclick="removeItem(${index})">Eliminar</button>
+      `;
+      cartList.appendChild(li);
+      total += item.price * item.quantity;
+    });
+
+    totalSpan.textContent = `Total: $${total}`;
+  }
+
+  // Función para eliminar un producto del carrito
+  function removeItem(index) {
+    cart.splice(index, 1);
+    updateCart();
+  }
+
+  // Agregar productos al carrito
   document.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', () => {
       const name = btn.getAttribute('data-name');
@@ -414,17 +435,6 @@
       alert('El carrito está vacío. Agregá productos antes de confirmar.');
       return;
     }
-    if (!selectedPaymentMethod) {
-      e.preventDefault();
-      alert('Seleccioná un método de pago.'); // En realidad esto no se mostrará porque ya hay uno predefinido
-      return;
-    }
-    if (!userDataJSON) {
-      e.preventDefault();
-      alert('No se encontraron datos del usuario. Por favor, iniciá sesión nuevamente.');
-      window.location.href = 'login.html';
-      return;
-    }
 
     const userData = JSON.parse(userDataJSON);
     document.getElementById('hiddenName').value = userData.name;
@@ -439,37 +449,13 @@
     document.getElementById('pedidoResumen').value = resumen;
   });
 
-  // Logout
+  // Cerrar sesión
   document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('userData');
     window.location.href = 'login.html';
   });
 
-  // Actualizar carrito
-  function updateCart() {
-    cartList.innerHTML = '';
-    let total = 0;
-
-    cart.forEach((item, index) => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <div>${item.name} - ${item.quantity} x $${item.price}</div>
-        <button onclick="removeItem(${index})">Eliminar</button>
-      `;
-      cartList.appendChild(li);
-      total += item.price * item.quantity;
-    });
-
-    totalSpan.textContent = `Total: $${total}`;
-  }
-
-  // Eliminar ítem
-  function removeItem(index) {
-    cart.splice(index, 1);
-    updateCart();
-  }
-
-  updateCart();
+  updateCart(); // Llamada inicial para que no esté vacío
 </script>
 
 </body>

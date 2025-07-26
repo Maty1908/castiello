@@ -35,13 +35,12 @@
     <p><strong>Monto a pagar:</strong> $<span id="monto"></span></p>
     <p>Por favor, enviá el comprobante al correo o WhatsApp.</p>
   </div>
-
   <a href="inicio.html" class="btn btn-danger mt-4">Volver a la tienda</a>
-
-  <script>
-    // Mostrar monto desde localStorage
-    const monto = localStorage.getItem('montoTotal');
-    document.getElementById('monto').textContent = monto || '...';
-  </script>
+    
+<script>
+  // Leer el monto guardado y mostrarlo
+  const monto = localStorage.getItem('montoTotal');
+  document.getElementById('monto').textContent = monto || '...';
+</script>
 </body>
 </html>

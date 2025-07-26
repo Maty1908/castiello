@@ -450,10 +450,28 @@
   });
 
   // Cerrar sesión
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('userData');
-    window.location.href = 'index.html';
-  });
+ document.getElementById('order-form').addEventListener('submit', e => {
+  if (cart.length === 0) {
+    e.preventDefault();
+    alert('El carrito está vacío. Agregá productos antes de confirmar.');
+    return;
+  }
+
+  const userData = JSON.parse(userDataJSON);
+  document.getElementById('hiddenName').value = userData.name;
+  document.getElementById('hiddenEmail').value = userData.email;
+  document.getElementById('hiddenAddress').value = userData.address;
+  metodoPagoInput.value = selectedPaymentMethod;
+
+  const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');
+  const total = totalSpan.textContent.replace('Total: $', '');
+
+  // ✅ Guarda el total en localStorage para gracias.html
+  localStorage.setItem('montoTotal', total);
+
+  let resumen = `Pedido: ${pedido}. Total: $${total}`;
+  document.getElementById('pedidoResumen').value = resumen;
+});
 
   // Llamado inicial
   updateCart();

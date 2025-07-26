@@ -343,20 +343,26 @@
 
     <!-- Formulario oculto para enviar datos -->
     <form id="order-form" action="https://formsubmit.co/yerbacastiello@gmail.com" method="POST">
-      <input type="hidden" name="_next" value="https://www.catiello.com/gracias.html" /> 
-      <input type="hidden" name="Nombre y Apellido" id="hiddenName" />
-      <input type="hidden" name="Email" id="hiddenEmail" />
-      <input type="hidden" name="Celular" id="hiddenAddress" />
-      <input type="hidden" name="Pedido" id="pedidoResumen" />
-      <input type="hidden" name="Método de Pago" id="pagoMetodo" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_template" value="table" />
-      <div class="text-center">
-        <button type="submit" class="btn btn-success btn-lg px-5" style="border-radius: 50px; background-color: var(--color-principal); border: none;">
-          Confirmar Pedido
-        </button>
-      </div>
-    </form>
+  <!-- Redirección a tu página de gracias -->
+  <input type="hidden" name="_next" value="https://www.catiello.com/gracias.html" />
+  <!-- Para evitar captcha -->
+  <input type="hidden" name="_captcha" value="false" />
+  <!-- Para que el email llegue en formato tabla -->
+  <input type="hidden" name="_template" value="table" />
+
+  <!-- Campos ocultos que llenás con JS -->
+  <input type="hidden" name="Nombre y Apellido" id="hiddenName" />
+  <input type="hidden" name="Email" id="hiddenEmail" />
+  <input type="hidden" name="Celular" id="hiddenAddress" />
+  <input type="hidden" name="Pedido" id="pedidoResumen" />
+  <input type="hidden" name="Método de Pago" id="pagoMetodo" />
+
+  <div class="text-center">
+    <button type="submit" class="btn btn-success btn-lg px-5" style="border-radius: 50px; background-color: var(--color-principal); border: none;">
+      Confirmar Pedido
+    </button>
+  </div>
+</form>
 
   </main>
 

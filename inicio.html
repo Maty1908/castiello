@@ -376,87 +376,101 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    // Simula datos usuario para demo (reemplazar por login real)
-    // localStorage.setItem('userData', JSON.stringify({name: 'Juan Pérez', email: 'juan@mail.com', address: '123456789'}));
+<script>
+  // Simula datos usuario para demo (reemplazar por login real)
+  // localStorage.setItem('userData', JSON.stringify({name: 'Juan Pérez', email: 'juan@mail.com', address: '123456789'}));
 
-    const userDataJSON = localStorage.getItem('userData');
+  const userDataJSON = localStorage.getItem('userData');
+  if (!userDataJSON) {
+    window.location.href = 'login.html';
+  }
+
+  const cart = [];
+  const cartList = document.getElementById('cart');
+  const totalSpan = document.getElementById('total');
+  const metodoPagoInput = document.getElementById('pagoMetodo');
+  let selectedPaymentMethod = 'Transferencia'; // Ahora sí se puede modificar
+
+  // Añadir producto al carrito
+  document.querySelectorAll('.add-to-cart').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.getAttribute('data-name');
+      const price = Number(btn.getAttribute('data-price'));
+
+      const foundIndex = cart.findIndex(item => item.name === name);
+      if (foundIndex > -1) {
+        cart[foundIndex].quantity++;
+      } else {
+        cart.push({ name, price, quantity: 1 });
+      }
+      updateCart();
+    });
+  });
+
+  // Enviar formulario
+  document.getElementById('order-form').addEventListener('submit', e => {
+    if (cart.length === 0) {
+      e.preventDefault();
+      alert('El carrito está vacío. Agregá productos antes de confirmar.');
+      return;
+    }
+    if (!selectedPaymentMethod) {
+      e.preventDefault();
+      alert('Seleccioná un método de pago.'); // En realidad esto no se mostrará porque ya hay uno predefinido
+      return;
+    }
     if (!userDataJSON) {
+      e.preventDefault();
+      alert('No se encontraron datos del usuario. Por favor, iniciá sesión nuevamente.');
       window.location.href = 'login.html';
+      return;
     }
 
-    const cart = [];
-    const cartList = document.getElementById('cart');
-    const totalSpan = document.getElementById('total');
-    const metodoPagoInput = document.getElementById('pagoMetodo');
-    const selectedPaymentMethod = 'Transferencia';
+    const userData = JSON.parse(userDataJSON);
+    document.getElementById('hiddenName').value = userData.name;
+    document.getElementById('hiddenEmail').value = userData.email;
+    document.getElementById('hiddenAddress').value = userData.address;
+    metodoPagoInput.value = selectedPaymentMethod;
 
-    // Añadir producto al carrito
-    document.querySelectorAll('.add-to-cart').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const name = btn.getAttribute('data-name');
-        const price = Number(btn.getAttribute('data-price'));
+    const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');
+    const total = totalSpan.textContent.replace('Total: $', '');
+    let resumen = `Pedido: ${pedido}. Total: $${total}`;
 
-        const foundIndex = cart.findIndex(item => item.name === name);
-        if (foundIndex > -1) {
-          cart[foundIndex].quantity++;
-        } else {
-          cart.push({ name, price, quantity: 1 });
-        }
-        updateCart();
-      });
+    document.getElementById('pedidoResumen').value = resumen;
+  });
+
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('userData');
+    window.location.href = 'login.html';
+  });
+
+  // Actualizar carrito
+  function updateCart() {
+    cartList.innerHTML = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div>${item.name} - ${item.quantity} x $${item.price}</div>
+        <button onclick="removeItem(${index})">Eliminar</button>
+      `;
+      cartList.appendChild(li);
+      total += item.price * item.quantity;
     });
 
-    // Selección método pago
-    paymentButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        paymentButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedPaymentMethod = btn.getAttribute('data-method');
-        paymentError.classList.add('d-none');
-      });
-    });
+    totalSpan.textContent = `Total: $${total}`;
+  }
 
-    // Enviar formulario
-    document.getElementById('order-form').addEventListener('submit', e => {
-      if (cart.length === 0) {
-        e.preventDefault();
-        alert('El carrito está vacío. Agregá productos antes de confirmar.');
-        return;
-      }
-      if (!selectedPaymentMethod) {
-        e.preventDefault();
-        paymentError.classList.remove('d-none');
-        return;
-      }
-      if (!userDataJSON) {
-        e.preventDefault();
-        alert('No se encontraron datos del usuario. Por favor, iniciá sesión nuevamente.');
-        window.location.href = 'login.html';
-        return;
-      }
-
-      const userData = JSON.parse(userDataJSON);
-      document.getElementById('hiddenName').value = userData.name;
-      document.getElementById('hiddenEmail').value = userData.email;
-      document.getElementById('hiddenAddress').value = userData.address;
-      metodoPagoInput.value = selectedPaymentMethod;
-
-      const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');
-      const total = totalSpan.textContent.replace('Total: $', '');
-      let resumen = `Pedido: ${pedido}. Total: $${total}`;
-
-      document.getElementById('pedidoResumen').value = resumen;
-    });
-
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem('userData');
-      window.location.href = 'login.html';
-    });
-
+  // Eliminar ítem
+  function removeItem(index) {
+    cart.splice(index, 1);
     updateCart();
-  </script>
+  }
+
+  updateCart();
+</script>
 
 </body>
 </html>

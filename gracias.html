@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gracias por tu pedido</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --color-principal: #CB4955;
+      --color-secundario: #F8DB5E;
+    }
+
+    body {
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--color-principal);
+      font-size: 2.8rem;
+      font-weight: bold;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #333;
+      margin: 1rem 0;
+    }
+
+    .btn-volver {
+      background-color: var(--color-secundario);
+      border: 2px solid var(--color-principal);
+      color: var(--color-principal);
+      padding: 0.75rem 2rem;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-volver:hover {
+      background-color: var(--color-principal);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>¡Gracias por tu pedido!</h1>
+    <p>Lo estamos procesando y nos comunicaremos a la brevedad.</p>
+    <a href="index.html" class="btn-volver">Volver a la tienda</a>
+  </div>
+</body>
+</html>

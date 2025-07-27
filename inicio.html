@@ -59,53 +59,6 @@
       text-shadow: 1px 1px 3px var(--color-principal);
       font-family: 'Montserrat', sans-serif;
     }
-    :root {
-      --color-principal: #e1221c;
-      --color-secundario: #F8DB5E;
-    }
-
-    body {
-      font-family: 'Outfit', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-    }
-
-    nav.navbar {
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      background-color: var(--color-principal) !important;
-    }
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.9rem;
-      color: #fff !important;
-      letter-spacing: 2px;
-      user-select: none;
-    }
-    #logoutBtn {
-      font-weight: 600;
-      color: #fff;
-      border-color: #fff;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    #logoutBtn:hover {
-      background-color: #fff;
-      color: var(--color-principal);
-    }
-
-    header h1 {
-      font-size: 3.2rem;
-      font-weight: 900;
-      margin-bottom: 0.5rem;
-      text-shadow: 2px 2px 5px var(--color-principal);
-    }
-    header p {
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-shadow: 1px 1px 3px var(--color-principal);
-    }
 
     .product-card {
       border-radius: 15px;
@@ -439,7 +392,7 @@
     const userData = JSON.parse(userDataJSON);
     document.getElementById('hiddenName').value = userData.name;
     document.getElementById('hiddenEmail').value = userData.email;
-    document.getElementById('hiddenAddress').value = userData.address; // si ahora es celular, asegurate de que 'address' sea 'celular'
+    document.getElementById('hiddenAddress').value = userData.celular || userData.address || '';
     metodoPagoInput.value = selectedPaymentMethod;
 
     const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');
@@ -451,8 +404,15 @@
     document.getElementById('pedidoResumen').value = resumen;
   });
 
-  // Llamado inicial
+  // Botón cerrar sesión
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('userData');
+    window.location.href = 'login.html';
+  });
+
+  // Inicializa la lista al cargar
   updateCart();
 </script>
+
 </body>
 </html>

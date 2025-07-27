@@ -392,7 +392,7 @@
     const userData = JSON.parse(userDataJSON);
     document.getElementById('hiddenName').value = userData.name;
     document.getElementById('hiddenEmail').value = userData.email;
-    document.getElementById('hiddencellphone').value = userData.celular || userData.address || '';
+    document.getElementById('hiddenAddress').value = userData.cellphone || '';
     metodoPagoInput.value = selectedPaymentMethod;
 
     const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');

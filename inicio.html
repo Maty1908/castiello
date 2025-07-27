@@ -395,15 +395,15 @@
 
     cart.forEach((item, index) => {
       const li = document.createElement('li');
-      li.innerHTML = 
+      li.innerHTML = `
         <div>${item.name} - ${item.quantity} x $${item.price}</div>
         <button onclick="removeItem(${index})">Eliminar</button>
-      ;
+      `;
       cartList.appendChild(li);
       total += item.price * item.quantity;
     });
 
-    totalSpan.textContent = Total: $${total};
+    totalSpan.textContent = `Total: $${total}`;
   }
 
   // Función para eliminar un producto del carrito
@@ -439,46 +439,20 @@
     const userData = JSON.parse(userDataJSON);
     document.getElementById('hiddenName').value = userData.name;
     document.getElementById('hiddenEmail').value = userData.email;
-    document.getElementById('hiddenAddress').value = userData.address;
+    document.getElementById('hiddenAddress').value = userData.address; // si ahora es celular, asegurate de que 'address' sea 'celular'
     metodoPagoInput.value = selectedPaymentMethod;
 
-    const pedido = cart.map(i => ${i.name} - ${i.quantity} x $${i.price}).join(', ');
+    const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');
     const total = totalSpan.textContent.replace('Total: $', '');
-    let resumen = Pedido: ${pedido}. Total: $${total};
 
+    localStorage.setItem('montoTotal', total);
+
+    const resumen = `Pedido: ${pedido}. Total: $${total}`;
     document.getElementById('pedidoResumen').value = resumen;
   });
 
-  // Cerrar sesión
- document.getElementById('order-form').addEventListener('submit', e => {
-  if (cart.length === 0) {
-    e.preventDefault();
-    alert('El carrito está vacío. Agregá productos antes de confirmar.');
-    return;
-  }
-
-  const userData = JSON.parse(userDataJSON);
-  document.getElementById('hiddenName').value = userData.name;
-  document.getElementById('hiddenEmail').value = userData.email;
-  document.getElementById('hiddenAddress').value = userData.address;
-  metodoPagoInput.value = selectedPaymentMethod;
-
-  const pedido = cart.map(i => ${i.name} - ${i.quantity} x $${i.price}).join(', ');
-  const total = totalSpan.textContent.replace('Total: $', '');
-
-  // ✅ Guarda el total en localStorage para gracias.html
-  localStorage.setItem('montoTotal', total);
-
-  let resumen = Pedido: ${pedido}. Total: $${total};
-  document.getElementById('pedidoResumen').value = resumen;
-});
-
   // Llamado inicial
   updateCart();
-</script>
-
-</body>
-</html>dateCart();
 </script>
 </body>
 </html>

@@ -86,14 +86,14 @@
     <p class="text-small">Tus datos serán usados para procesar el pedido</p>
   </div>
 
-  <script>
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+ <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
-      const address = document.getElementById('address').value.trim();
+      const cellphone = document.getElementById('cellphone').value.trim();
 
-      if (!name || !email || !address) {
+      if (!name || !email || !cellphone) {
         alert('Por favor completá todos los campos.');
         return;
       }
@@ -101,7 +101,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
       const userData = {
         name,
         email,
-        address
+        cellphone
       };
 
       localStorage.setItem('userData', JSON.stringify(userData));

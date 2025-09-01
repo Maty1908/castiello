@@ -5,108 +5,334 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Yerbamate Castiello - Tienda Online</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Tipografías: Títulos + Texto -->
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Colores */
+    :root {
+      --color-principal: #e1221c;
+      --color-secundario: #F8DB5E;
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
-      background-color: #f8f9fa;
-      padding-top: 120px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
     }
-    .navbar {
-      background-color: #004d26;
-      padding: 20px 0;
+
+    h1, h2, h5, .navbar-brand {
+      font-family: 'Alfa Slab One', cursive !important;
+    }
+
+    nav.navbar {
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      background-color: var(--color-principal) !important;
     }
     .navbar-brand {
-      font-family: 'Alfa Slab One', cursive;
-      font-size: 2rem;
+      font-size: 1.9rem;
       color: #fff !important;
+      letter-spacing: 2px;
+      user-select: none;
     }
-    .btn-primary {
-      background-color: #007f3f;
-      border-color: #007f3f;
+    #logoutBtn {
+      font-weight: 600;
+      color: #fff;
+      border-color: #fff;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
-    .btn-primary:hover {
-      background-color: #005f2f;
-      border-color: #005f2f;
+    #logoutBtn:hover {
+      background-color: #fff;
+      color: var(--color-principal);
     }
-    .card {
+    header h1 {
+      font-size: 3.2rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 5px var(--color-principal);
+    }
+    header p {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-shadow: 1px 1px 3px var(--color-principal);
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .product-card {
       border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 3px solid var(--color-secundario);
     }
-    footer {
-      background-color: #004d26;
+    .product-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 35px var(--color-principal);
+      border-color: var(--color-principal);
+      z-index: 10;
+    }
+    .product-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-bottom: 5px solid var(--color-principal);
+    }
+    .card-body {
+      padding: 1.2rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-title {
+      font-weight: 700;
+      color: var(--color-principal);
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+      user-select: none;
+    }
+    .card-text {
+      flex-grow: 1;
+      color: #7f574c;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+    .btn-add {
+      background-color: var(--color-principal);
+      border: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: background-color 0.3s ease;
       color: white;
-      padding: 20px 0;
-      margin-top: 50px;
+      border-radius: 50px;
+      padding: 10px 20px;
+      user-select: none;
+    }
+    .btn-add:hover {
+      background-color: #9c3a44;
+    }
+
+    #cart li {
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      background-color: #fff6c398;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--color-principal);
+      border: 2px solid var(--color-principal);
+    }
+    #cart li div {
+      max-width: 75%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #cart li button {
+      flex-shrink: 0;
+      background-color: var(--color-principal);
+      border: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 6px 12px;
+      transition: background-color 0.3s ease;
+      user-select: none;
+      cursor: pointer;
+    }
+    #cart li button:hover {
+      background-color: #9c3a44;
+    }
+    #total {
+      font-size: 1.5rem;
+      color: var(--color-principal);
+      font-weight: 700;
+      text-align: center;
+      margin-top: 15px;
+      user-select: none;
+    }
+
+    #payment-methods {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    #payment-methods button {
+      min-width: 170px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 12px 20px;
+      border-radius: 50px;
+      border: 2.5px solid var(--color-principal);
+      color: var(--color-principal);
+      background-color: var(--color-secundario);
+      transition: all 0.3s ease;
+      user-select: none;
+      cursor: pointer;
+      box-shadow: 2px 2px 7px rgba(203, 73, 85, 0.35);
+    }
+    #payment-methods button.active,
+    #payment-methods button:hover {
+      background-color: var(--color-principal);
+      color: var(--color-secundario);
+      box-shadow: 0 0 15px var(--color-principal);
+    }
+
+    #transfer-info {
+      max-width: 350px;
+      margin: 0 auto 20px auto;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 15px;
+      display: none;
+      color: var(--color-principal);
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      user-select: none;
+    }
+
+    footer {
+      background-color: var(--color-principal);
+      color: var(--color-secundario);
+      padding: 18px 0;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      user-select: none;
+      margin-top: auto;
+      box-shadow: 0 -3px 8px rgba(203, 73, 85, 0.5);
     }
   </style>
 </head>
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container d-flex justify-content-between align-items-center flex-wrap">
-      <div class="d-flex flex-column">
-        <a class="navbar-brand mb-0" href="#">Yerba Mate Castiello</a>
-        <small class="text-white fw-semibold" style="font-size: 0.9rem; margin-top: -5px;">
-          Calidad, tradición y sabor en cada mate
-        </small>
-      </div>
-      <div>
-        <button class="btn btn-outline-light" id="logoutBtn">Cerrar sesión</button>
-      </div>
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container d-flex justify-content-between align-items-center flex-wrap">
+    
+    <!-- Bloque título + lema -->
+    <div class="d-flex flex-column">
+      <a class="navbar-brand mb-0" href="#">Yerba Mate Castiello</a>
+      <small class="text-white fw-semibold" style="font-size: 0.9rem; margin-top: -5px;">
+        Calidad, tradición y sabor en cada mate
+      </small>
     </div>
-  </nav>
+
+    <!-- Botón cerrar sesión -->
+    <div>
+      <button class="btn btn-outline-light" id="logoutBtn">Cerrar sesión</button>
+    </div>
+
+  </div>
+</nav>
 
   <!-- Main -->
   <main class="container mb-5" style="margin-top: 150px;">
-    <h2 class="text-center mb-4">Nuestros Productos</h2>
-    <div class="row g-4 mb-5">
-      <!-- Producto ejemplo -->
-      <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-          <img src="yerba1.jpg" class="card-img-top" alt="Yerba Mate Tradicional">
-          <div class="card-body text-center">
-            <h5 class="card-title">Yerba Mate Tradicional</h5>
-            <p class="card-text">$1500</p>
-            <button class="btn btn-primary add-to-cart" data-name="Yerba Mate Tradicional" data-price="1500">Agregar al carrito</button>
+
+    <!-- Productos -->
+    <section id="productos" class="mb-5">
+      <h2 class="text-center mb-4" style="color: var(--color-principal); font-weight: 800;">Nuestras Variedades</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="product-card">
+            <img src="img/roja.png" alt="Yerba Tradicional" class="product-img" />
+            <div class="card-body" style="background-color: #fff6c398;">
+              <h5 class="card-title">Yerba Tradicional</h5>
+              <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
+              <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="2000">Agregar al carrito - $2000</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="product-card">
+            <img src="img/dorada.jpg" alt="Yerba Selección Especial" class="product-img" style="width: 100%;">
+            <div class="card-body" style="background-color: #fff6c398;">
+              <h5 class="card-title">Yerba Selección Especial</h5>
+              <p class="card-text">Yerba mate con un proceso natural de estacionado que dura entre 18 y 24 meses.</p>
+              <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="2500">Agregar al carrito - $2500</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="product-card">
+            <img src="img/verde.jpg" alt="Yerba Despalada" class="product-img" />
+            <div class="card-body" style="background-color: #fff6c398;">
+              <h5 class="card-title">Yerba Despalada</h5>
+              <p class="card-text">Yerba mate con mayor presencia de hojas y aroma intenso, estacionada naturalmente durante 24 meses.</p>
+              <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3000">Agregar al carrito - $3000</button>
+            </div>
           </div>
         </div>
       </div>
-      <!-- podés duplicar más productos acá -->
-    </div>
+    </section>
 
     <!-- Carrito -->
-    <h2 class="text-center mb-4">Carrito de Compras</h2>
-    <ul id="cart" class="list-group mb-3"></ul>
-    <h4 id="total" class="text-end mb-4">Total: $0</h4>
+    <section id="carrito">
+      <h2 class="text-center mb-4" style="color: var(--color-principal); font-weight: 800;">Carrito</h2>
+      <ul id="cart" class="list-group mb-3"></ul>
+      <p id="total" class="text-center fw-bold fs-4" style="color: var(--color-principal); user-select:none;">Total: $0</p>
+    </section>
 
-    <!-- Formulario de pedido -->
-    <form id="order-form" action="https://formsubmit.co/tuemail@ejemplo.com" method="POST" class="p-4 shadow rounded bg-white">
-      <input type="hidden" name="name" id="hiddenName">
-      <input type="hidden" name="email" id="hiddenEmail">
-      <input type="hidden" name="address" id="hiddenAddress">
-      <input type="hidden" name="metodoPago" id="pagoMetodo">
-      <input type="hidden" name="pedidoResumen" id="pedidoResumen">
+    <!-- Métodos de pago -->
+<section id="payment-section" class="text-center mb-5">
+  <h2 style="color: var(--color-principal); font-weight: 800;">Método de Pago</h2>
+  <p class="fs-5 fw-semibold text-danger">Solo se acepta pago por transferencia.</p>
+</section>
 
-      <p class="fw-semibold">Método de pago: <span class="text-success">Solo Transferencia</span></p>
+    <!-- Formulario oculto para enviar datos -->
+    <form id="order-form" action="https://formsubmit.co/yerbacastiello@gmail.com" method="POST">
+  <!-- Redirección a tu página de gracias -->
+  <input type="hidden" name="_next" value="https://maty1908.github.io/castiello/gracias.html" />
+  <!-- Para evitar captcha -->
+  <input type="hidden" name="_captcha" value="false" />
+  <!-- Para que el email llegue en formato tabla -->
+  <input type="hidden" name="_template" value="table" />
 
-      <button type="submit" class="btn btn-success w-100">Confirmar Pedido</button>
-    </form>
+  <!-- Campos ocultos que llenás con JS -->
+  <input type="hidden" name="Nombre y Apellido" id="hiddenName" />
+  <input type="hidden" name="Email" id="hiddenEmail" />
+  <input type="hidden" name="Celular" id="hiddenAddress" />
+  <input type="hidden" name="Pedido" id="pedidoResumen" />
+  <input type="hidden" name="Método de Pago" id="pagoMetodo" />
+
+  <div class="text-center">
+    <button type="submit" class="btn btn-success btn-lg px-5" style="border-radius: 50px; background-color: var(--color-principal); border: none;">
+      Confirmar Pedido
+    </button>
+  </div>
+</form>
+
   </main>
 
   <!-- Footer -->
   <footer>
-    <div class="container text-center">
+    <div class="container">
       &copy; 2025 Yerba Mate Castiello - Todos los derechos reservados
     </div>
   </footer>
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
   const userDataJSON = localStorage.getItem('userData');
   if (!userDataJSON) {
-    window.location.href = 'inicio.sesion.html';
+    window.location.href = 'index.html';
   }
 
   const cart = [];
@@ -115,17 +341,16 @@
   const metodoPagoInput = document.getElementById('pagoMetodo');
   let selectedPaymentMethod = 'Transferencia';
 
-  // Actualizar carrito
+  // Función para actualizar el carrito
   function updateCart() {
     cartList.innerHTML = '';
     let total = 0;
 
     cart.forEach((item, index) => {
       const li = document.createElement('li');
-      li.className = "list-group-item d-flex justify-content-between align-items-center";
       li.innerHTML = `
-        ${item.name} - ${item.quantity} x $${item.price}
-        <button class="btn btn-sm btn-danger" onclick="removeItem(${index})">Eliminar</button>
+        <div>${item.name} - ${item.quantity} x $${item.price}</div>
+        <button onclick="removeItem(${index})">Eliminar</button>
       `;
       cartList.appendChild(li);
       total += item.price * item.quantity;
@@ -134,13 +359,13 @@
     totalSpan.textContent = `Total: $${total}`;
   }
 
-  // Eliminar producto
+  // Función para eliminar un producto del carrito
   function removeItem(index) {
     cart.splice(index, 1);
     updateCart();
   }
 
-  // Agregar productos
+  // Agregar productos al carrito
   document.querySelectorAll('.add-to-cart').forEach(btn => {
     btn.addEventListener('click', () => {
       const name = btn.getAttribute('data-name');
@@ -179,18 +404,15 @@
     document.getElementById('pedidoResumen').value = resumen;
   });
 
-  // Botón cerrar sesión (corregido)
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('userData');
-      window.location.href = 'inicio.sesion.html';
-    });
-  }
+  // Botón cerrar sesión
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('userData');
+    window.location.href = 'index.html';
+  });
 
-  // Inicializa carrito vacío
+  // Inicializa la lista al cargar
   updateCart();
 </script>
+
 </body>
 </html>
-

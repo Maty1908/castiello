@@ -44,9 +44,20 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
   #total-offcanvas { font-size: 1.1rem; }
 }
 @media (max-width: 576px) {
-  .row.g-4 { row-gap: 1rem; column-gap: 0.5rem; }
-  .card-body { padding: 0.8rem; }
-  .btn-add { font-size: 0.9rem; padding: 5px 10px; }
+  .navbar-brand {
+    margin: 0 auto;        
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+  }
+  .navbar-brand img {
+    margin-bottom: 5px;   
+  }
+  .navbar-toggler {
+    position: absolute;
+    right: 10px;         
+    top: 10px;
+  }
 }
 </style>
 </head>

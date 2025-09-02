@@ -100,7 +100,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
     <button type="button" id="btnFinalizar" class="btn btn-finalizar w-100 mt-3">Finalizar compra</button>
   </div>
 </div>
-    
+
 <main class="container mb-5 mt-5">
 <section id="productos" class="mb-5">
   <h2 class="text-center mb-4" style="color: var(--color-principal); font-weight: 300;">Nuestras Variedades</h2>
@@ -164,6 +164,7 @@ const metodoPagoInput=document.getElementById('pagoMetodo');
 const cartCount=document.getElementById('cart-count');
 let selectedPaymentMethod='Transferencia';
 
+// Funciones globales
 function changeQuantity(index, delta){
   cart[index].quantity+=delta;
   if(cart[index].quantity<1) cart[index].quantity=1;
@@ -175,6 +176,7 @@ function removeItem(index){
   updateCart();
 }
 
+// Agregar productos al carrito
 document.querySelectorAll('.add-to-cart').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const name=btn.dataset.name;
@@ -186,6 +188,7 @@ document.querySelectorAll('.add-to-cart').forEach(btn=>{
   });
 });
 
+// Actualizar carrito
 function updateCart(){
   cartOffcanvas.innerHTML='';
   let total=0;
@@ -208,7 +211,7 @@ function updateCart(){
 
 updateCart();
 
-// NUEVO: Validación solo al FINALIZAR COMPRA
+// FINALIZAR COMPRA
 document.getElementById('btnFinalizar').addEventListener('click', function(){
   if(cart.length===0){
     alert('El carrito está vacío. Agregá productos antes de confirmar.');
@@ -233,10 +236,10 @@ document.getElementById('btnFinalizar').addEventListener('click', function(){
   localStorage.setItem('montoTotal',total);
   document.getElementById('pedidoResumen').value=`Pedido: ${pedido}. Total: $${total}`;
 
-  // ENVIAMOS EL FORMULARIO MANUALMENTE
   document.getElementById('order-form').submit();
 });
 </script>
 
 </body>
 </html>
+

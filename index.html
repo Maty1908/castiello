@@ -164,7 +164,7 @@ const metodoPagoInput = document.getElementById('pagoMetodo');
 const cartCount = document.getElementById('cart-count');
 let selectedPaymentMethod = 'Transferencia';
 
-// Funciones globales
+// Funciones de carrito
 function changeQuantity(index, delta){
   cart[index].quantity += delta;
   if(cart[index].quantity < 1) cart[index].quantity = 1;
@@ -176,7 +176,7 @@ function removeItem(index){
   updateCart();
 }
 
-// Agregar productos al carrito (sin validar sesión)
+// Agregar productos al carrito
 document.querySelectorAll('.add-to-cart').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const name = btn.dataset.name;
@@ -212,13 +212,15 @@ function updateCart(){
 updateCart();
 
 // Finalizar compra
-document.getElementById('btnFinalizar').addEventListener('click', function(){
+document.getElementById('btnFinalizar').addEventListener('click', function(e){
+  e.preventDefault(); // <-- Esto evita que el formulario se envíe automáticamente
+
   if(cart.length === 0){
     alert('El carrito está vacío. Agregá productos antes de confirmar.');
     return;
   }
 
-  // Validar sesión solo al FINALIZAR
+  // Validar sesión
   const userDataJSON = localStorage.getItem('userData');
   if(!userDataJSON){
     alert('Tenés que iniciar sesión antes de finalizar la compra.');
@@ -226,6 +228,7 @@ document.getElementById('btnFinalizar').addEventListener('click', function(){
     return;
   }
 
+  // Si hay sesión, completamos formulario y enviamos
   const userData = JSON.parse(userDataJSON);
   document.getElementById('hiddenName').value = userData.name;
   document.getElementById('hiddenEmail').value = userData.email;
@@ -237,8 +240,9 @@ document.getElementById('btnFinalizar').addEventListener('click', function(){
   localStorage.setItem('montoTotal', total);
   document.getElementById('pedidoResumen').value = `Pedido: ${pedido}. Total: $${total}`;
 
-  document.getElementById('order-form').submit();
+  document.getElementById('order-form').submit(); // <-- envío manual
 });
 </script>
+
 </body>
 </html>

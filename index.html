@@ -177,8 +177,17 @@ function removeItem(index){
 }
 
 // Agregar productos al carrito
-document.querySelectorAll('.add-to-cart').forEach(btn=>{
-  btn.addEventListener('click',()=>{
+document.querySelectorAll('.add-to-cart').forEach(btn => {
+  btn.addEventListener('click', () => {
+
+    // Validar sesión
+    const userDataJSON = localStorage.getItem('userData');
+    if(!userDataJSON){
+        alert('Debes iniciar sesión para agregar productos.');
+        window.location.href = 'inicio.sesion.html';
+        return;
+    }
+
     const name = btn.dataset.name;
     const price = Number(btn.dataset.price);
     const foundIndex = cart.findIndex(i => i.name === name);
@@ -213,14 +222,13 @@ updateCart();
 
 // Finalizar compra
 document.getElementById('btnFinalizar').addEventListener('click', function(e){
-  e.preventDefault(); // <-- Esto evita que el formulario se envíe automáticamente
+  e.preventDefault();
 
   if(cart.length === 0){
     alert('El carrito está vacío. Agregá productos antes de confirmar.');
     return;
   }
 
-  // Validar sesión
   const userDataJSON = localStorage.getItem('userData');
   if(!userDataJSON){
     alert('Tenés que iniciar sesión antes de finalizar la compra.');
@@ -228,7 +236,6 @@ document.getElementById('btnFinalizar').addEventListener('click', function(e){
     return;
   }
 
-  // Si hay sesión, completamos formulario y enviamos
   const userData = JSON.parse(userDataJSON);
   document.getElementById('hiddenName').value = userData.name;
   document.getElementById('hiddenEmail').value = userData.email;
@@ -240,7 +247,7 @@ document.getElementById('btnFinalizar').addEventListener('click', function(e){
   localStorage.setItem('montoTotal', total);
   document.getElementById('pedidoResumen').value = `Pedido: ${pedido}. Total: $${total}`;
 
-  document.getElementById('order-form').submit(); // <-- envío manual
+  document.getElementById('order-form').submit();
 });
 </script>
 

@@ -374,63 +374,7 @@ footer {
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const cart = [];
-  const cartOffcanvas = document.getElementById('cart-offcanvas');
-  const totalOffcanvas = document.getElementById('total-offcanvas');
-  const cartCount = document.getElementById('cart-count');
-
-  function actualizarCarrito() {
-    cartOffcanvas.innerHTML = '';
-    let total = 0;
-    cart.forEach((item, index) => {
-      total += item.price;
-      const li = document.createElement('li');
-      li.textContent = `${item.name} - $${item.price}`;
-      const btnRemove = document.createElement('button');
-      btnRemove.textContent = 'Eliminar';
-      btnRemove.onclick = () => {
-        cart.splice(index, 1);
-        actualizarCarrito();
-      };
-      li.appendChild(btnRemove);
-      cartOffcanvas.appendChild(li);
-    });
-    totalOffcanvas.textContent = `Total: $${total}`;
-    cartCount.textContent = cart.length;
-  }
-
-  document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', (event) => {
-      event.stopPropagation(); // Para que no abra la página al hacer click en el botón
-      const name = button.getAttribute('data-name');
-      const price = parseInt(button.getAttribute('data-price'));
-      cart.push({ name, price });
-      actualizarCarrito();
-    });
-  });
-
-  document.querySelectorAll('.product-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const url = card.getAttribute('data-url');
-      if (url) {
-        window.location.href = url;
-      }
-    });
-  });
-
-  document.getElementById('btnFinalizar').addEventListener('click', () => {
-    if(cart.length === 0) {
-      alert('El carrito está vacío.');
-      return;
-    }
-    if(confirm('¿Deseas finalizar la compra?')) {
-      const pedidoTexto = cart.map(item => `${item.name} - $${item.price}`).join('\n');
-      document.getElementById('pedidoResumen').value = pedidoTexto;
-      document.getElementById('order-form').submit();
-    }
-  });
-</script>
+<script> const cart = []; const cartOffcanvas = document.getElementById('cart-offcanvas'); const totalOffcanvas = document.getElementById('total-offcanvas'); const metodoPagoInput = document.getElementById('pagoMetodo'); const cartCount = document.getElementById('cart-count'); let selectedPaymentMethod = 'Transferencia'; // Cambiar cantidad: elimina el producto si la cantidad es menor a 1 function changeQuantity(index, delta){ cart[index].quantity += delta; if(cart[index].quantity < 1) { cart.splice(index, 1); } updateCart(); } // Agregar productos al carrito document.querySelectorAll('.add-to-cart').forEach(btn => { btn.addEventListener('click', () => { // Validar sesión const userDataJSON = localStorage.getItem('userData'); if(!userDataJSON){ alert('Debes iniciar sesión para agregar productos.'); window.location.href = 'inicio.sesion.html'; return; } const name = btn.dataset.name; const price = Number(btn.dataset.price); const foundIndex = cart.findIndex(i => i.name === name); if(foundIndex > -1) cart[foundIndex].quantity++; else cart.push({name, price, quantity:1}); updateCart(); }); }); // Actualizar carrito con botones para modificar cantidad, sin botón eliminar function updateCart(){ cartOffcanvas.innerHTML = ''; let total = 0; cart.forEach((item,index)=>{ const liOff = document.createElement('li'); liOff.className = "list-group-item d-flex justify-content-between align-items-center"; liOff.innerHTML = <span>${item.name}</span> <div> <button onclick="changeQuantity(${index},-1)">−</button> <span>${item.quantity}</span> <button onclick="changeQuantity(${index},1)">+</button> </div> <span>$${item.price*item.quantity}</span>; cartOffcanvas.appendChild(liOff); total += item.price*item.quantity; }); totalOffcanvas.textContent = Total: $${total}; cartCount.textContent = cart.reduce((acc,i)=>acc+i.quantity,0); } updateCart(); // Finalizar compra document.getElementById('btnFinalizar').addEventListener('click', function(e){ e.preventDefault(); if(cart.length === 0){ alert('El carrito está vacío. Agregá productos antes de confirmar.'); return; } const userDataJSON = localStorage.getItem('userData'); if(!userDataJSON){ alert('Tenés que iniciar sesión antes de finalizar la compra.'); window.location.href = 'inicio.sesion.html'; return; } const userData = JSON.parse(userDataJSON); document.getElementById('hiddenName').value = userData.name; document.getElementById('hiddenEmail').value = userData.email; document.getElementById('hiddenAddress').value = userData.cellphone || ''; metodoPagoInput.value = selectedPaymentMethod; const pedido = cart.map(i => ${i.name} - ${i.quantity} x $${i.price}).join(', '); const total = cart.reduce((acc,i) => acc + i.price*i.quantity, 0); localStorage.setItem('montoTotal', total); document.getElementById('pedidoResumen').value = Pedido: ${pedido}. Total: $${total}; document.getElementById('order-form').submit(); }); </script>
 
 </body>
 </html>

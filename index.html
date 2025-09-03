@@ -121,7 +121,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Selección Especial</h5>
           <p class="card-text">Yerba mate con un proceso natural de estacionado que dura entre 18 y 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="3500">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="3500" onclick="window.location.href='yerba.dorada.html'">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
@@ -240,14 +240,11 @@ document.getElementById('btnFinalizar').addEventListener('click', function(e){
   document.getElementById('hiddenAddress').value = userData.cellphone || '';
   metodoPagoInput.value = selectedPaymentMethod;
 
-  const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');
-  const total = cart.reduce((acc,i) => acc + i.price*i.quantity, 0);
-  localStorage.setItem('montoTotal', total);
-  document.getElementById('pedidoResumen').value = `Pedido: ${pedido}. Total: $${total}`;
+  let pedidoTexto = cart.map(i => `${i.quantity} x ${i.name} ($${i.price*i.quantity})`).join('\n');
+  document.getElementById('pedidoResumen').value = pedidoTexto;
 
   document.getElementById('order-form').submit();
 });
 </script>
-
 </body>
 </html>

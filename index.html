@@ -173,12 +173,6 @@ function changeQuantity(index, delta){
   updateCart();
 }
 
-// Eliminar producto explícitamente
-function removeItem(index){
-  cart.splice(index,1);
-  updateCart();
-}
-
 // Agregar productos al carrito
 document.querySelectorAll('.add-to-cart').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -200,7 +194,7 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
   });
 });
 
-// Actualizar carrito con botones para modificar cantidad y eliminar
+// Actualizar carrito con botones para modificar cantidad, sin botón eliminar
 function updateCart(){
   cartOffcanvas.innerHTML = '';
   let total = 0;
@@ -213,7 +207,6 @@ function updateCart(){
         <button onclick="changeQuantity(${index},-1)">−</button>
         <span>${item.quantity}</span>
         <button onclick="changeQuantity(${index},1)">+</button>
-        <button onclick="removeItem(${index})" style="margin-left:8px; background-color:#e1221c; color:#fff; border:none; border-radius:5px; padding:2px 6px; cursor:pointer;">Eliminar</button>
       </div>
       <span>$${item.price*item.quantity}</span>`;
     cartOffcanvas.appendChild(liOff);
@@ -255,7 +248,6 @@ document.getElementById('btnFinalizar').addEventListener('click', function(e){
   document.getElementById('order-form').submit();
 });
 </script>
-
 
 </body>
 </html>

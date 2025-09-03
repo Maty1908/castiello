@@ -106,32 +106,34 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
   <h2 class="text-center mb-4" style="color: var(--color-principal); font-weight: 300;">Nuestras Variedades</h2>
   <div class="row g-4">
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card">
+      <div class="product-card" data-url="yerba.tradicional.html" style="cursor:pointer;">
         <img src="img/roja.png" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Tradicional</h5>
           <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000">Agregar al carrito - $3000</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000" onclick="event.stopPropagation();">Agregar al carrito - $3000</button>
         </div>
       </div>
     </div>
+
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card">
+      <div class="product-card" data-url="yerba.dorada.html" style="cursor:pointer;">
         <img src="img/dorada.jpg" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Selección Especial</h5>
           <p class="card-text">Yerba mate con un proceso natural de estacionado que dura entre 18 y 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="3500" onclick="window.location.href='yerba.dorada.html'">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
+
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card">
+      <div class="product-card" data-url="yerba.despalada.html" style="cursor:pointer;">
         <img src="img/verde.jpg" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Despalada</h5>
           <p class="card-text">Yerba mate con mayor presencia de hojas y aroma intenso, estacionada naturalmente durante 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
@@ -160,91 +162,66 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 const cart = [];
 const cartOffcanvas = document.getElementById('cart-offcanvas');
 const totalOffcanvas = document.getElementById('total-offcanvas');
-const metodoPagoInput = document.getElementById('pagoMetodo');
 const cartCount = document.getElementById('cart-count');
-let selectedPaymentMethod = 'Transferencia';
 
-// Cambiar cantidad: elimina el producto si la cantidad es menor a 1
-function changeQuantity(index, delta){
-  cart[index].quantity += delta;
-  if(cart[index].quantity < 1) {
-    cart.splice(index, 1);
-  }
-  updateCart();
-}
-
-// Agregar productos al carrito
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-  btn.addEventListener('click', () => {
-
-    // Validar sesión
-    const userDataJSON = localStorage.getItem('userData');
-    if(!userDataJSON){
-        alert('Debes iniciar sesión para agregar productos.');
-        window.location.href = 'inicio.sesion.html';
-        return;
-    }
-
-    const name = btn.dataset.name;
-    const price = Number(btn.dataset.price);
-    const foundIndex = cart.findIndex(i => i.name === name);
-    if(foundIndex > -1) cart[foundIndex].quantity++;
-    else cart.push({name, price, quantity:1});
-    updateCart();
-  });
-});
-
-// Actualizar carrito con botones para modificar cantidad, sin botón eliminar
-function updateCart(){
+function actualizarCarrito() {
   cartOffcanvas.innerHTML = '';
   let total = 0;
-  cart.forEach((item,index)=>{
-    const liOff = document.createElement('li');
-    liOff.className = "list-group-item d-flex justify-content-between align-items-center";
-    liOff.innerHTML = `
-      <span>${item.name}</span>
-      <div>
-        <button onclick="changeQuantity(${index},-1)">−</button>
-        <span>${item.quantity}</span>
-        <button onclick="changeQuantity(${index},1)">+</button>
-      </div>
-      <span>$${item.price*item.quantity}</span>`;
-    cartOffcanvas.appendChild(liOff);
-    total += item.price*item.quantity;
+  cart.forEach((item, index) => {
+    total += item.price;
+    const li = document.createElement('li');
+    li.textContent = `${item.name} - $${item.price}`;
+    
+    const btnRemove = document.createElement('button');
+    btnRemove.textContent = 'Eliminar';
+    btnRemove.onclick = () => {
+      cart.splice(index, 1);
+      actualizarCarrito();
+    };
+    
+    li.appendChild(btnRemove);
+    cartOffcanvas.appendChild(li);
   });
   totalOffcanvas.textContent = `Total: $${total}`;
-  cartCount.textContent = cart.reduce((acc,i)=>acc+i.quantity,0);
+  cartCount.textContent = cart.length;
 }
 
-updateCart();
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', (event) => {
+    event.stopPropagation(); // Para que no abra la página al hacer click en el botón
+    const name = button.getAttribute('data-name');
+    const price = parseInt(button.getAttribute('data-price'));
+    cart.push({ name, price });
+    actualizarCarrito();
+  });
+});
 
-// Finalizar compra
-document.getElementById('btnFinalizar').addEventListener('click', function(e){
-  e.preventDefault();
+document.querySelectorAll('.product-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const url = card.getAttribute('data-url');
+    if (url) {
+      window.location.href = url;
+    }
+  });
+});
 
-  if(cart.length === 0){
-    alert('El carrito está vacío. Agregá productos antes de confirmar.');
+// Finalizar compra: envia el formulario con los datos del carrito (simulado aquí)
+document.getElementById('btnFinalizar').addEventListener('click', () => {
+  if(cart.length === 0) {
+    alert('El carrito está vacío.');
     return;
   }
-
-  const userDataJSON = localStorage.getItem('userData');
-  if(!userDataJSON){
-    alert('Tenés que iniciar sesión antes de finalizar la compra.');
-    window.location.href = 'inicio.sesion.html';
-    return;
+  // Aquí podrías pedir nombre, email, etc. antes de enviar el formulario
+  // Para simplificar, solo pedimos confirmación
+  if(confirm('¿Deseas finalizar la compra?')) {
+    const pedidoTexto = cart.map(item => `${item.name} - $${item.price}`).join('\n');
+    document.getElementById('pedidoResumen').value = pedidoTexto;
+    // Podrías agregar más campos al formulario aquí si querés
+    
+    document.getElementById('order-form').submit();
   }
-
-  const userData = JSON.parse(userDataJSON);
-  document.getElementById('hiddenName').value = userData.name;
-  document.getElementById('hiddenEmail').value = userData.email;
-  document.getElementById('hiddenAddress').value = userData.cellphone || '';
-  metodoPagoInput.value = selectedPaymentMethod;
-
-  let pedidoTexto = cart.map(i => `${i.quantity} x ${i.name} ($${i.price*i.quantity})`).join('\n');
-  document.getElementById('pedidoResumen').value = pedidoTexto;
-
-  document.getElementById('order-form').submit();
 });
 </script>
+
 </body>
 </html>

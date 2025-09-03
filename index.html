@@ -164,13 +164,16 @@ const metodoPagoInput = document.getElementById('pagoMetodo');
 const cartCount = document.getElementById('cart-count');
 let selectedPaymentMethod = 'Transferencia';
 
-// Funciones de carrito
+// Cambiar cantidad: elimina el producto si la cantidad es menor a 1
 function changeQuantity(index, delta){
   cart[index].quantity += delta;
-  if(cart[index].quantity < 1) cart[index].quantity = 1;
+  if(cart[index].quantity < 1) {
+    cart.splice(index, 1);
+  }
   updateCart();
 }
 
+// Eliminar producto explícitamente
 function removeItem(index){
   cart.splice(index,1);
   updateCart();
@@ -197,20 +200,22 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
   });
 });
 
-// Actualizar carrito
+// Actualizar carrito con botones para modificar cantidad y eliminar
 function updateCart(){
   cartOffcanvas.innerHTML = '';
   let total = 0;
   cart.forEach((item,index)=>{
     const liOff = document.createElement('li');
     liOff.className = "list-group-item d-flex justify-content-between align-items-center";
-    liOff.innerHTML = `<span>${item.name}</span>
-                       <div>
-                         <button onclick="changeQuantity(${index},-1)">−</button>
-                         <span>${item.quantity}</span>
-                         <button onclick="changeQuantity(${index},1)">+</button>
-                       </div>
-                       <span>$${item.price*item.quantity}</span>`;
+    liOff.innerHTML = `
+      <span>${item.name}</span>
+      <div>
+        <button onclick="changeQuantity(${index},-1)">−</button>
+        <span>${item.quantity}</span>
+        <button onclick="changeQuantity(${index},1)">+</button>
+        <button onclick="removeItem(${index})" style="margin-left:8px; background-color:#e1221c; color:#fff; border:none; border-radius:5px; padding:2px 6px; cursor:pointer;">Eliminar</button>
+      </div>
+      <span>$${item.price*item.quantity}</span>`;
     cartOffcanvas.appendChild(liOff);
     total += item.price*item.quantity;
   });
@@ -250,6 +255,7 @@ document.getElementById('btnFinalizar').addEventListener('click', function(e){
   document.getElementById('order-form').submit();
 });
 </script>
+
 
 </body>
 </html>

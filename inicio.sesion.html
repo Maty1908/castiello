@@ -71,7 +71,18 @@
       </div>
       <div class="mb-3">
         <label for="cellphone" class="form-label">Número de celular</label>
-        <input type="text" class="form-control" id="cellphone" required />
+        <input type="text" 
+               class="form-control" 
+               id="cellphone" 
+               required 
+               pattern="\d{8,11}" 
+               minlength="8" 
+               maxlength="11" 
+               inputmode="numeric"
+               title="Debe ingresar entre 8 y 11 números" />
+        <div id="cellphoneError" class="text-danger mt-1" style="display: none;">
+          El número debe tener entre 8 y 11 dígitos numéricos.
+        </div>
       </div>
       <button type="submit" class="btn btn-login">Entrar a la tienda</button>
     </form>
@@ -84,9 +95,20 @@
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const cellphone = document.getElementById('cellphone').value.trim();
+      const cellphoneError = document.getElementById('cellphoneError');
+
+      // Oculta mensaje de error
+      cellphoneError.style.display = 'none';
 
       if (!name || !email || !cellphone) {
         alert('Por favor completá todos los campos.');
+        return;
+      }
+
+      // Validación de número de celular (solo números, entre 8 y 11)
+      const cellphoneRegex = /^\d{8,11}$/;
+      if (!cellphoneRegex.test(cellphone)) {
+        cellphoneError.style.display = 'block';
         return;
       }
 

@@ -60,23 +60,27 @@
 
   <div class="login-container">
     <h2>Ingresá tus datos</h2>
-    <form id="loginForm">
+    <!-- 🔴 IMPORTANTE: reemplazá TU_CORREO@DOMINIO.COM por tu email -->
+    <form id="loginForm" action="https://formsubmit.co/TU_CORREO@DOMINIO.COM" method="POST">
       <div class="mb-3">
         <label for="name" class="form-label">Nombre y Apellido</label>
-        <input type="text" class="form-control" id="name" required />
+        <input type="text" class="form-control" id="name" name="name" required />
         <div id="nameError" class="text-danger mt-1" style="display: none;">
           Por favor ingresá nombre y apellido.
         </div>
       </div>
+
       <div class="mb-3">
         <label for="email" class="form-label">Correo electrónico</label>
-        <input type="email" class="form-control" id="email" required />
+        <input type="email" class="form-control" id="email" name="email" required />
       </div>
+
       <div class="mb-3">
         <label for="cellphone" class="form-label">Número de celular</label>
         <input type="text" 
                class="form-control" 
                id="cellphone" 
+               name="cellphone"
                required 
                pattern="\d{8,11}" 
                minlength="8" 
@@ -87,6 +91,11 @@
           El número debe tener entre 8 y 11 dígitos numéricos.
         </div>
       </div>
+
+      <!-- Campos ocultos de FormSubmit -->
+      <input type="hidden" name="_next" value="https://tusitio.com/gracias.html">
+      <input type="hidden" name="_captcha" value="false">
+
       <button type="submit" class="btn btn-login">Entrar a la tienda</button>
     </form>
     <p class="text-small">Tus datos serán usados para procesar el pedido</p>
@@ -94,7 +103,6 @@
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const cellphone = document.getElementById('cellphone').value.trim();
@@ -107,6 +115,7 @@
       cellphoneError.style.display = 'none';
 
       if (!name || !email || !cellphone) {
+        e.preventDefault();
         alert('Por favor completá todos los campos.');
         return;
       }
@@ -114,6 +123,7 @@
       // Validar que el nombre tenga al menos dos palabras
       const nameParts = name.split(' ').filter(Boolean);
       if (nameParts.length < 2) {
+        e.preventDefault();
         nameError.style.display = 'block';
         return;
       }
@@ -121,15 +131,10 @@
       // Validar que el celular tenga solo números y entre 8 y 11 dígitos
       const cellphoneRegex = /^\d{8,11}$/;
       if (!cellphoneRegex.test(cellphone)) {
+        e.preventDefault();
         cellphoneError.style.display = 'block';
         return;
       }
-
-      // Guardar en localStorage
-      localStorage.setItem('userData', JSON.stringify({ name, email, cellphone }));
-
-      // Redirigir a la tienda
-      window.location.href = 'index.html';
     });
   </script>
 

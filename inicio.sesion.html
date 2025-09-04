@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -58,50 +58,49 @@
 </head>
 <body>
 
-  <div class="login-container">
-    <h2>Ingresá tus datos</h2>
-    <form id="loginForm">
-      <div class="mb-3">
-        <label for="name" class="form-label">Nombre y Apellido</label>
-        <input type="text" class="form-control" id="name" required />
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Correo electrónico</label>
-        <input type="email" class="form-control" id="email" required />
-      </div>
-      <div class="mb-3">
-        <label for="cellphone" class="form-label">Número de celular</label>
-        <input type="text" class="form-control" id="cellphone" required />
-      </div>
-      <button type="submit" class="btn btn-login">Entrar a la tienda</button>
-    </form>
-    <p class="text-small">Tus datos serán usados para procesar el pedido</p>
-  </div>
+<div class="login-container">
+  <h2>Ingresá tus datos</h2>
+  <form id="loginForm">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre y Apellido</label>
+      <input type="text" class="form-control" id="name" required />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo electrónico</label>
+      <input type="email" class="form-control" id="email" required />
+    </div>
+    <div class="mb-3">
+      <label for="cellphone" class="form-label">Número de celular</label>
+      <input type="text" class="form-control" id="cellphone" required />
+    </div>
+    <button type="submit" class="btn btn-login">Entrar a la tienda</button>
+  </form>
+  <p class="text-small">Tus datos serán usados para procesar el pedido</p>
+</div>
 
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const cellphone = document.getElementById('cellphone').value.trim();
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const cellphone = document.getElementById('cellphone').value.trim();
 
-      if (!name || !email || !cellphone) {
-        alert('Por favor completá todos los campos.');
-        return;
-      }
+  if (!name || !email || !cellphone) {
+    alert('Por favor completá todos los campos.');
+    return;
+  }
 
-      // Guardar en localStorage con la clave correcta
-      localStorage.setItem('userData', JSON.stringify({ 
-        name, 
-        email, 
-        phone: cellphone 
-      }));
+  // Guardar datos con la clave correcta para index.html
+  localStorage.setItem('userData', JSON.stringify({ 
+    name, 
+    email, 
+    phone: cellphone  // ⚠ Importante que sea "phone"
+  }));
 
-      // Redirigir a la tienda
-      window.location.href = 'index.html';
-    });
-  </script>
+  // Redirigir a la tienda
+  window.location.href = 'index.html';
+});
+</script>
 
 </body>
 </html>
-

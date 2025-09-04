@@ -178,15 +178,6 @@ const btnFinalizar = document.getElementById('btnFinalizar');
 
 let selectedPaymentMethod = 'Transferencia';
 
-// ✅ Verificar sesión al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-  const userDataJSON = localStorage.getItem('userData');
-  if(!userDataJSON){
-    alert('Debes iniciar sesión para acceder a la tienda.');
-    window.location.href = 'inicio.sesion.html';
-  }
-});
-
 // Actualizar carrito
 function updateCart(){
   cartOffcanvas.innerHTML = '';
@@ -259,7 +250,7 @@ btnFinalizar.addEventListener('click', () => {
   const userData = JSON.parse(userDataJSON);
   hiddenName.value = userData.name;
   hiddenEmail.value = userData.email;
-  hiddenPhone.value = userData.phone; // clave corregida
+  hiddenPhone.value = userData.cellphone;
   pedidoResumen.value = cart.map(i => `${i.name} x ${i.quantity} = $${i.price * i.quantity}`).join('\n');
   pagoMetodo.value = selectedPaymentMethod;
 

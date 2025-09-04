@@ -78,7 +78,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
           <a class="nav-link active" aria-current="page" href="inicio.sesion.html">Iniciar sesión</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito">
+          <a class="nav-link d-flex align-items-center" href="#" id="btnCarrito" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito">
             Carrito <span id="cart-count">0</span>
             <img src="img/carrito.png" style="width:28px;margin-left:5px;">
           </a>
@@ -105,16 +105,20 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 <section id="productos" class="mb-5">
   <h2 class="text-center mb-4" style="color: var(--color-principal); font-weight: 300;">Nuestras Variedades</h2>
   <div class="row g-4">
+
+    <!-- Producto 1 -->
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card">
+      <div class="product-card" data-url="yerba.tradicional.html" style="cursor:pointer;">
         <img src="img/roja.png" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Tradicional</h5>
           <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000">Agregar al carrito - $3000</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000" onclick="event.stopPropagation();">Agregar al carrito - $3000</button>
         </div>
       </div>
     </div>
+
+    <!-- Producto 2 -->
     <div class="col-md-4 col-sm-6 col-12">
       <div class="product-card" data-url="yerba.dorada.html" style="cursor:pointer;">
         <img src="img/dorada.jpg" class="product-img" />
@@ -125,27 +129,30 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         </div>
       </div>
     </div>
+
+    <!-- Producto 3 -->
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card">
+      <div class="product-card" data-url="yerba.despalada.html" style="cursor:pointer;">
         <img src="img/verde.jpg" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Despalada</h5>
           <p class="card-text">Yerba mate con mayor presencia de hojas y aroma intenso, estacionada naturalmente durante 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- Formulario Oculto -->
-<form id="order-form" action="https://formsubmit.co/yerbacastiello@gmail.com" method="POST">
+<!-- Formulario oculto para envío -->
+<form id="order-form" action="https://formsubmit.co/yerbacastiello@gmail.com" method="POST" style="display:none;">
   <input type="hidden" name="_next" value="https://maty1908.github.io/castiello/gracias.html" />
   <input type="hidden" name="_captcha" value="false" />
   <input type="hidden" name="_template" value="table" />
   <input type="hidden" name="Nombre y Apellido" id="hiddenName" />
   <input type="hidden" name="Email" id="hiddenEmail" />
-  <input type="hidden" name="Celular" id="hiddenAddress" />
+  <input type="hidden" name="Celular" id="hiddenPhone" />
   <input type="hidden" name="Pedido" id="pedidoResumen" />
   <input type="hidden" name="Método de Pago" id="pagoMetodo" />
 </form>
@@ -160,95 +167,102 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 const cart = [];
 const cartOffcanvas = document.getElementById('cart-offcanvas');
 const totalOffcanvas = document.getElementById('total-offcanvas');
-const metodoPagoInput = document.getElementById('pagoMetodo');
 const cartCount = document.getElementById('cart-count');
+const hiddenName = document.getElementById('hiddenName');
+const hiddenEmail = document.getElementById('hiddenEmail');
+const hiddenPhone = document.getElementById('hiddenPhone');
+const pedidoResumen = document.getElementById('pedidoResumen');
+const pagoMetodo = document.getElementById('pagoMetodo');
+const orderForm = document.getElementById('order-form');
+const btnFinalizar = document.getElementById('btnFinalizar');
+
 let selectedPaymentMethod = 'Transferencia';
 
-// Cambiar cantidad: elimina el producto si la cantidad es menor a 1
+// Función para actualizar carrito y mostrar productos en offcanvas
+function updateCart(){
+  cartOffcanvas.innerHTML = '';
+  let total = 0;
+  cart.forEach((item, index) => {
+    total += item.price * item.quantity;
+    const li = document.createElement('li');
+    li.innerHTML = `
+      ${item.name} x ${item.quantity} = $${item.price * item.quantity}
+      <div>
+        <button onclick="changeQuantity(${index}, -1)">-</button>
+        <button onclick="changeQuantity(${index}, 1)">+</button>
+      </div>
+    `;
+    cartOffcanvas.appendChild(li);
+  });
+  totalOffcanvas.textContent = `Total: $${total}`;
+  cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
+}
+
+// Cambiar cantidad en carrito
 function changeQuantity(index, delta){
   cart[index].quantity += delta;
-  if(cart[index].quantity < 1) {
-    cart.splice(index, 1);
-  }
+  if(cart[index].quantity <= 0) cart.splice(index, 1);
   updateCart();
 }
 
-// Agregar productos al carrito
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-  btn.addEventListener('click', () => {
+// Manejar click en productos para abrir página
+document.querySelectorAll('.product-card').forEach(card => {
+  card.addEventListener('click', () => {
+    window.location.href = card.getAttribute('data-url');
+  });
+});
 
+// Manejar click en botones agregar al carrito
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.stopPropagation(); // Para que no dispare el evento del card que redirige
     // Validar sesión
     const userDataJSON = localStorage.getItem('userData');
     if(!userDataJSON){
-        alert('Debes iniciar sesión para agregar productos.');
-        window.location.href = 'inicio.sesion.html';
-        return;
+      alert('Debes iniciar sesión para agregar productos al carrito.');
+      window.location.href = 'inicio.sesion.html';
+      return;
     }
 
-    const name = btn.dataset.name;
-    const price = Number(btn.dataset.price);
-    const foundIndex = cart.findIndex(i => i.name === name);
-    if(foundIndex > -1) cart[foundIndex].quantity++;
-    else cart.push({name, price, quantity:1});
+    const name = button.getAttribute('data-name');
+    const price = Number(button.getAttribute('data-price'));
+    const existingItem = cart.find(item => item.name === name);
+
+    if(existingItem){
+      existingItem.quantity++;
+    } else {
+      cart.push({name, price, quantity:1});
+    }
     updateCart();
   });
 });
 
-// Actualizar carrito con botones para modificar cantidad, sin botón eliminar
-function updateCart(){
-  cartOffcanvas.innerHTML = '';
-  let total = 0;
-  cart.forEach((item,index)=>{
-    const liOff = document.createElement('li');
-    liOff.className = "list-group-item d-flex justify-content-between align-items-center";
-    liOff.innerHTML = `
-      <span>${item.name}</span>
-      <div>
-        <button onclick="changeQuantity(${index},-1)">−</button>
-        <span>${item.quantity}</span>
-        <button onclick="changeQuantity(${index},1)">+</button>
-      </div>
-      <span>$${item.price*item.quantity}</span>`;
-    cartOffcanvas.appendChild(liOff);
-    total += item.price*item.quantity;
-  });
-  totalOffcanvas.textContent = `Total: $${total}`;
-  cartCount.textContent = cart.reduce((acc,i)=>acc+i.quantity,0);
-}
-
-updateCart();
-
 // Finalizar compra
-document.getElementById('btnFinalizar').addEventListener('click', function(e){
-  e.preventDefault();
-
-  if(cart.length === 0){
-    alert('El carrito está vacío. Agregá productos antes de confirmar.');
-    return;
-  }
-
+btnFinalizar.addEventListener('click', () => {
   const userDataJSON = localStorage.getItem('userData');
   if(!userDataJSON){
-    alert('Tenés que iniciar sesión antes de finalizar la compra.');
+    alert('Debes iniciar sesión para finalizar la compra.');
     window.location.href = 'inicio.sesion.html';
+    return;
+  }
+  if(cart.length === 0){
+    alert('El carrito está vacío.');
     return;
   }
 
   const userData = JSON.parse(userDataJSON);
-  document.getElementById('hiddenName').value = userData.name;
-  document.getElementById('hiddenEmail').value = userData.email;
-  document.getElementById('hiddenAddress').value = userData.cellphone || '';
-  metodoPagoInput.value = selectedPaymentMethod;
+  hiddenName.value = userData.name;
+  hiddenEmail.value = userData.email;
+  hiddenPhone.value = userData.phone;
+  pedidoResumen.value = cart.map(i => `${i.name} x ${i.quantity} = $${i.price * i.quantity}`).join('\n');
+  pagoMetodo.value = selectedPaymentMethod;
 
-  const pedido = cart.map(i => `${i.name} - ${i.quantity} x $${i.price}`).join(', ');
-  const total = cart.reduce((acc,i) => acc + i.price*i.quantity, 0);
-  localStorage.setItem('montoTotal', total);
-  document.getElementById('pedidoResumen').value = `Pedido: ${pedido}. Total: $${total}`;
-
-  document.getElementById('order-form').submit();
+  orderForm.submit();
 });
+
+// Inicializar contador carrito a 0
+updateCart();
 </script>
 
 </body>
 </html>
-

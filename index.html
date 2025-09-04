@@ -178,7 +178,7 @@ const btnFinalizar = document.getElementById('btnFinalizar');
 
 let selectedPaymentMethod = 'Transferencia';
 
-// Función para actualizar carrito y mostrar productos en offcanvas
+// Actualizar carrito
 function updateCart(){
   cartOffcanvas.innerHTML = '';
   let total = 0;
@@ -205,29 +205,26 @@ function changeQuantity(index, delta){
   updateCart();
 }
 
-// Manejar click en productos para abrir página
+// Click en productos abre su página
 document.querySelectorAll('.product-card').forEach(card => {
   card.addEventListener('click', () => {
     window.location.href = card.getAttribute('data-url');
   });
 });
 
-// Manejar click en botones agregar al carrito
+// Agregar al carrito
 document.querySelectorAll('.add-to-cart').forEach(button => {
   button.addEventListener('click', (e) => {
-    e.stopPropagation(); // Para que no dispare el evento del card que redirige
-    // Validar sesión
+    e.stopPropagation(); 
     const userDataJSON = localStorage.getItem('userData');
     if(!userDataJSON){
       alert('Debes iniciar sesión para agregar productos al carrito.');
       window.location.href = 'inicio.sesion.html';
       return;
     }
-
     const name = button.getAttribute('data-name');
     const price = Number(button.getAttribute('data-price'));
     const existingItem = cart.find(item => item.name === name);
-
     if(existingItem){
       existingItem.quantity++;
     } else {
@@ -253,14 +250,13 @@ btnFinalizar.addEventListener('click', () => {
   const userData = JSON.parse(userDataJSON);
   hiddenName.value = userData.name;
   hiddenEmail.value = userData.email;
-  hiddenPhone.value = userData.phone;
+  hiddenPhone.value = userData.phone; // ⚠ clave corregida
   pedidoResumen.value = cart.map(i => `${i.name} x ${i.quantity} = $${i.price * i.quantity}`).join('\n');
   pagoMetodo.value = selectedPaymentMethod;
 
   orderForm.submit();
 });
 
-// Inicializar contador carrito a 0
 updateCart();
 </script>
 

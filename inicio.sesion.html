@@ -60,7 +60,6 @@
 
   <div class="login-container">
     <h2>Ingresá tus datos</h2>
-    <!-- 🔴 IMPORTANTE: reemplazá TU_CORREO@DOMINIO.COM por tu email -->
     <form id="loginForm" action="https://formsubmit.co/TU_CORREO@DOMINIO.COM" method="POST">
       <div class="mb-3">
         <label for="name" class="form-label">Nombre y Apellido</label>
@@ -93,7 +92,7 @@
       </div>
 
       <!-- Campos ocultos de FormSubmit -->
-      <input type="hidden" name="_next" value="https://tusitio.com/gracias.html">
+      <input type="hidden" name="_next" value="https://tusitio.com/index.html">
       <input type="hidden" name="_captcha" value="false">
 
       <button type="submit" class="btn btn-login">Entrar a la tienda</button>
@@ -114,13 +113,13 @@
       nameError.style.display = 'none';
       cellphoneError.style.display = 'none';
 
+      // Validaciones
       if (!name || !email || !cellphone) {
         e.preventDefault();
         alert('Por favor completá todos los campos.');
         return;
       }
 
-      // Validar que el nombre tenga al menos dos palabras
       const nameParts = name.split(' ').filter(Boolean);
       if (nameParts.length < 2) {
         e.preventDefault();
@@ -128,13 +127,16 @@
         return;
       }
 
-      // Validar que el celular tenga solo números y entre 8 y 11 dígitos
       const cellphoneRegex = /^\d{8,11}$/;
       if (!cellphoneRegex.test(cellphone)) {
         e.preventDefault();
         cellphoneError.style.display = 'block';
         return;
       }
+
+      // ✅ Guardar en localStorage antes de enviar el form
+      localStorage.setItem('userData', JSON.stringify({ name, email, cellphone }));
+      // ⚠️ NO hacemos e.preventDefault() acá → así FormSubmit envía al mail
     });
   </script>
 

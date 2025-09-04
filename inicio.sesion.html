@@ -16,7 +16,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      min-height: 100vh; /* ocupa toda la altura de la pantalla */
       margin: 0;
       background-color: #fff;
     }
@@ -64,9 +64,6 @@
       <div class="mb-3">
         <label for="name" class="form-label">Nombre y Apellido</label>
         <input type="text" class="form-control" id="name" required />
-        <div id="nameError" class="text-danger mt-1" style="display: none;">
-          Por favor ingresá nombre y apellido.
-        </div>
       </div>
       <div class="mb-3">
         <label for="email" class="form-label">Correo electrónico</label>
@@ -74,18 +71,7 @@
       </div>
       <div class="mb-3">
         <label for="cellphone" class="form-label">Número de celular</label>
-        <input type="text" 
-               class="form-control" 
-               id="cellphone" 
-               required 
-               pattern="\d{8,11}" 
-               minlength="8" 
-               maxlength="11" 
-               inputmode="numeric"
-               title="Debe ingresar entre 8 y 11 números" />
-        <div id="cellphoneError" class="text-danger mt-1" style="display: none;">
-          El número debe tener entre 8 y 11 dígitos numéricos.
-        </div>
+        <input type="text" class="form-control" id="cellphone" required />
       </div>
       <button type="submit" class="btn btn-login">Entrar a la tienda</button>
     </form>
@@ -99,37 +85,13 @@
       const email = document.getElementById('email').value.trim();
       const cellphone = document.getElementById('cellphone').value.trim();
 
-      const nameError = document.getElementById('nameError');
-      const cellphoneError = document.getElementById('cellphoneError');
-
-      // Oculta los errores previos
-      nameError.style.display = 'none';
-      cellphoneError.style.display = 'none';
-
       if (!name || !email || !cellphone) {
         alert('Por favor completá todos los campos.');
         return;
       }
 
-      // Validar que el nombre tenga al menos dos palabras
-      const nameParts = name.split(' ').filter(Boolean);
-      if (nameParts.length < 2) {
-        nameError.style.display = 'block';
-        return;
-      }
-
-      // Validar que el celular tenga solo números y entre 8 y 11 dígitos
-      const cellphoneRegex = /^\d{8,11}$/;
-      if (!cellphoneRegex.test(cellphone)) {
-        cellphoneError.style.display = 'block';
-        return;
-      }
-
-      // Guardar en localStorage
       localStorage.setItem('userData', JSON.stringify({ name, email, cellphone }));
-
-      // Redirigir a la tienda
-      window.location.href = 'index.html';
+      window.location.href = 'inicio.html';
     });
   </script>
 

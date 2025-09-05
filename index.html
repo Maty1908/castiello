@@ -65,7 +65,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid px-3">
-    <a class="navbar-brand d-flex align-items-center" href="#">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
       <img src="img/logo.catiello.png" alt="Logo" height="50" class="d-inline-block align-text-top me-2">
       <h1>Yerba Mate Castiello</h1>
     </a>
@@ -164,7 +164,8 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-const cart = [];
+// ---------- VARIABLES ----------
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 const cartOffcanvas = document.getElementById('cart-offcanvas');
 const totalOffcanvas = document.getElementById('total-offcanvas');
 const cartCount = document.getElementById('cart-count');
@@ -178,7 +179,7 @@ const btnFinalizar = document.getElementById('btnFinalizar');
 
 let selectedPaymentMethod = 'Transferencia';
 
-// Actualizar carrito
+// ---------- ACTUALIZAR CARRITO ----------
 function updateCart(){
   cartOffcanvas.innerHTML = '';
   let total = 0;
@@ -196,23 +197,24 @@ function updateCart(){
   });
   totalOffcanvas.textContent = `Total: $${total}`;
   cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
+  localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Cambiar cantidad en carrito
+// ---------- CAMBIAR CANTIDAD ----------
 function changeQuantity(index, delta){
   cart[index].quantity += delta;
   if(cart[index].quantity <= 0) cart.splice(index, 1);
   updateCart();
 }
 
-// Click en productos abre su página
+// ---------- CLICK EN PRODUCTO ----------
 document.querySelectorAll('.product-card').forEach(card => {
   card.addEventListener('click', () => {
     window.location.href = card.getAttribute('data-url');
   });
 });
 
-// Agregar al carrito
+// ---------- AGREGAR AL CARRITO ----------
 document.querySelectorAll('.add-to-cart').forEach(button => {
   button.addEventListener('click', (e) => {
     e.stopPropagation(); 
@@ -234,7 +236,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
   });
 });
 
-// Finalizar compra
+// ---------- FINALIZAR COMPRA ----------
 btnFinalizar.addEventListener('click', () => {
   const userDataJSON = localStorage.getItem('userData');
   if(!userDataJSON){
@@ -257,6 +259,7 @@ btnFinalizar.addEventListener('click', () => {
   orderForm.submit();
 });
 
+// ---------- CARGAR AL INICIO ----------
 updateCart();
 </script>
 

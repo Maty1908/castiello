@@ -3,141 +3,261 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Yerba Tradicional - Yerbamate Castiello</title>
+<title>Yerbamate Castiello - Tienda Online</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root { --color-principal: #e1221c; --color-secundario: #F8DB5E; }
-body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; margin:0; min-height:100vh; display:flex; flex-direction:column;}
+body { font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
 h1,h2,h5,.navbar-brand { font-family: 'Alfa Slab One', cursive !important; }
-nav.navbar { box-shadow:0 4px 6px rgba(0,0,0,0.1); background-color: var(--color-principal) !important; }
-.navbar-brand { font-size:1.6rem; color:#fff !important; letter-spacing:2px; user-select:none; }
-#cart-count { font-size:0.7rem; padding:0.25em 0.5em; background-color:#fff; color: var(--color-principal); border-radius:50%; margin-left:5px; display:inline-block; text-align:center; }
-.product-main-img { width:100%; border-radius:10px; margin-bottom:15px; object-fit:cover; }
-.product-thumb { width:70px; height:70px; object-fit:cover; border:2px solid transparent; border-radius:8px; cursor:pointer; margin-right:10px; }
-.product-thumb.active { border-color: var(--color-principal); }
-.btn-buy { background-color: var(--color-principal); color:white; border:none; border-radius:50px; padding:10px 20px; font-weight:600; transition:0.3s; }
-.btn-buy:hover { background-color:#9c3a44; }
-footer { background-color: var(--color-principal); color: var(--color-secundario); padding:15px 0; text-align:center; font-weight:500; font-size:0.85rem; letter-spacing:0.05em; margin-top:auto; box-shadow:0 -3px 8px rgba(203,73,85,0.5);}
+nav.navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: var(--color-principal) !important; }
+.navbar-brand { font-size: 1.6rem; color: #fff !important; letter-spacing: 2px; user-select: none; }
+#cart-count { font-size: 0.7rem; padding: 0.25em 0.5em; background-color: #fff; color: var(--color-principal); border-radius: 50%; margin-left:5px; display:inline-block; text-align:center; }
+.product-card { border-radius: 15px; overflow: hidden; box-shadow: 0 8px 15px rgba(0,0,0,0.12); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; background: white; display: flex; flex-direction: column; height: 100%; border: 3px solid var(--color-secundario); }
+.product-card:hover { transform: scale(1.03); box-shadow: 0 15px 25px var(--color-principal); border-color: var(--color-principal); z-index: 10; }
+.product-img { width: 100%; aspect-ratio: 4/3; border-bottom: 5px solid var(--color-principal); object-fit: cover; }
+.card-body { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.card-title { font-weight: 700; color: var(--color-principal); margin-bottom: 0.5rem; font-size: 1.2rem; user-select: none; }
+.card-text { flex-grow: 1; color: #7f574c; font-size: 0.95rem; margin-bottom: 1rem; user-select: none; }
+.btn-add { background-color: var(--color-principal); border: none; font-weight: 600; font-size: 1rem; transition: background-color 0.3s ease; color: white; border-radius: 50px; padding: 8px 16px; user-select: none; }
+.btn-add:hover { background-color: #9c3a44; }
+#cart-offcanvas li { font-weight: 600; font-size: 1rem; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; background-color: #fff6c398; display: flex; justify-content: space-between; align-items: center; color: var(--color-principal); border: 2px solid var(--color-principal); flex-wrap: wrap; }
+#cart-offcanvas li button { background-color: var(--color-principal); color:white; border:none; padding:3px 8px; border-radius:5px; margin:2px; cursor:pointer; }
+#cart-offcanvas li button:hover { background-color:#9c3a44; }
+#total-offcanvas { font-size: 1.3rem; color: var(--color-principal); font-weight: 700; text-align: center; margin-top: 10px; user-select: none; }
+footer { background-color: var(--color-principal); color: var(--color-secundario); padding: 15px 0; text-align: center; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em; user-select: none; margin-top: auto; box-shadow: 0 -3px 8px rgba(203,73,85,0.5); }
+#offcanvasCarrito { width: 100%; max-width: 500px; }
+.btn-finalizar { background-color: var(--color-principal); color:white; border:none; border-radius:50px; padding:10px 18px; }
+.btn-finalizar:hover { background-color:#9c3a44; }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .product-card { height: auto; }
+  .card-title { font-size: 1.1rem; }
+  .card-text { font-size: 0.9rem; }
+}
+@media (max-width: 768px) {
+  .navbar-brand { font-size: 1.3rem; flex-direction: column; text-align: center; }
+  .navbar-brand img { margin-bottom: 5px; }
+  #cart-count { font-size: 0.65rem; }
+  .btn-add { font-size: 0.95rem; padding: 6px 12px; }
+  #total-offcanvas { font-size: 1.1rem; }
+}
+@media (max-width: 576px) {
+  .navbar-brand {
+    margin: 0 auto;        
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+  }
+  .navbar-brand img {
+    margin-bottom: 5px;   
+  }
+  .navbar-toggler {
+    position: absolute;
+    right: 10px;         
+    top: 10px;
+  }
+}
 </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid px-3">
-    <a class="navbar-brand d-flex align-items-center" href="index.html">
+    <a class="navbar-brand d-flex align-items-center" href="#">
       <img src="img/logo.catiello.png" alt="Logo" height="50" class="d-inline-block align-text-top me-2">
-      Yerba Mate Castiello
+      <h1>Yerba Mate Castiello</h1>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto" style="align-items:center;">
-        <li class="nav-item"><a class="nav-link active" href="inicio.sesion.html">Iniciar sesión</a></li>
-        <li class="nav-item"><a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito">
-          Carrito <span id="cart-count">0</span>
-          <img src="img/carrito.png" style="width:28px;margin-left:5px;">
-        </a></li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="inicio.sesion.html">Iniciar sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" href="#" id="btnCarrito" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito">
+            Carrito <span id="cart-count">0</span>
+            <img src="img/carrito.png" style="width:28px;margin-left:5px;">
+          </a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- Offcanvas Carrito -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito">
+<!-- Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
   <div class="offcanvas-header">
-    <h5>Tu Carrito</h5>
+    <h5 id="offcanvasCarritoLabel">Tu Carrito</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body">
     <ul id="cart-offcanvas" class="list-group mb-3"></ul>
     <p id="total-offcanvas">Total: $0</p>
-    <button type="button" id="btnFinalizar" class="btn btn-buy w-100 mt-3">Finalizar compra</button>
+    <button type="button" id="btnFinalizar" class="btn btn-finalizar w-100 mt-3">Finalizar compra</button>
   </div>
 </div>
 
-<!-- Página de Producto -->
-<main class="container my-5">
-  <div class="row g-5">
-    
-    <!-- Imágenes -->
-    <div class="col-md-6">
-      <img id="mainImage" src="img/roja.png" alt="Yerba Tradicional" class="product-main-img">
-      <div class="d-flex">
-        <img src="img/roja.png" class="product-thumb active" onclick="changeImage(this)">
-        <img src="img/dorada.jpg" class="product-thumb" onclick="changeImage(this)">
-        <img src="img/verde.jpg" class="product-thumb" onclick="changeImage(this)">
+<main class="container mb-5 mt-5">
+<section id="productos" class="mb-5">
+  <h2 class="text-center mb-4" style="color: var(--color-principal); font-weight: 300;">Nuestras Variedades</h2>
+  <div class="row g-4">
+
+    <!-- Producto 1 -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="product-card" data-url="yerba.tradicional.html" style="cursor:pointer;">
+        <img src="img/roja.png" class="product-img" />
+        <div class="card-body" style="background-color:#fff6c398;">
+          <h5 class="card-title">Yerba Tradicional</h5>
+          <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000" onclick="event.stopPropagation();">Agregar al carrito - $3000</button>
+        </div>
       </div>
     </div>
 
-    <!-- Información del Producto -->
-    <div class="col-md-6">
-      <h1 style="color: var(--color-principal);">Yerba Tradicional Castiello</h1>
-      <p>Yerba mate suave al paladar, estacionada naturalmente durante 12 meses para lograr un sabor auténtico y duradero. Ideal para compartir momentos con amigos y familia o disfrutar solo.</p>
-      <p style="color: var(--color-principal); font-size:1.8rem; font-weight:700;">$3.000</p>
-
-      <div class="mb-3">
-        <label for="quantity" class="form-label">Cantidad:</label>
-        <input type="number" id="quantity" class="form-control w-25" value="1" min="1">
+    <!-- Producto 2 -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="product-card" data-url="yerba.dorada.html" style="cursor:pointer;">
+        <img src="img/dorada.jpg" class="product-img" />
+        <div class="card-body" style="background-color:#fff6c398;">
+          <h5 class="card-title">Yerba Selección Especial</h5>
+          <p class="card-text">Yerba mate con un proceso natural de estacionado que dura entre 18 y 24 meses.</p>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+        </div>
       </div>
-
-      <button class="btn btn-buy" id="addToCartBtn">Agregar al carrito</button>
-
-      <hr class="my-4">
-
-      <h5>Detalles:</h5>
-      <ul>
-        <li>Sabor auténtico y tradicional</li>
-        <li>Libre de aditivos artificiales</li>
-        <li>Proceso 100% natural y artesanal</li>
-        <li>Contenido: 500g</li>
-      </ul>
     </div>
+
+    <!-- Producto 3 -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="product-card" data-url="yerba.despalada.html" style="cursor:pointer;">
+        <img src="img/verde.jpg" class="product-img" />
+        <div class="card-body" style="background-color:#fff6c398;">
+          <h5 class="card-title">Yerba Despalada</h5>
+          <p class="card-text">Yerba mate con mayor presencia de hojas y aroma intenso, estacionada naturalmente durante 24 meses.</p>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+        </div>
+      </div>
+    </div>
+
   </div>
+</section>
+
+<!-- Formulario oculto para envío -->
+<form id="order-form" action="https://formsubmit.co/yerbacastiello@gmail.com" method="POST" style="display:none;">
+  <input type="hidden" name="_next" value="https://maty1908.github.io/castiello/gracias.html" />
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="Nombre y Apellido" id="hiddenName" />
+  <input type="hidden" name="Email" id="hiddenEmail" />
+  <input type="hidden" name="Celular" id="hiddenPhone" />
+  <input type="hidden" name="Pedido" id="pedidoResumen" />
+  <input type="hidden" name="Método de Pago" id="pagoMetodo" />
+</form>
 </main>
 
 <footer>
-  &copy; 2025 Yerba Mate Castiello - Yerba de tradición
+  <div class="container">&copy; 2025 Yerba Mate Castiello - Yerba de tradición</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Cambiar imagen principal
-function changeImage(el){
-  document.getElementById('mainImage').src = el.src;
-  document.querySelectorAll('.product-thumb').forEach(img => img.classList.remove('active'));
-  el.classList.add('active');
-}
-
-// Carrito simple
 const cart = [];
 const cartOffcanvas = document.getElementById('cart-offcanvas');
 const totalOffcanvas = document.getElementById('total-offcanvas');
 const cartCount = document.getElementById('cart-count');
+const hiddenName = document.getElementById('hiddenName');
+const hiddenEmail = document.getElementById('hiddenEmail');
+const hiddenPhone = document.getElementById('hiddenPhone');
+const pedidoResumen = document.getElementById('pedidoResumen');
+const pagoMetodo = document.getElementById('pagoMetodo');
+const orderForm = document.getElementById('order-form');
+const btnFinalizar = document.getElementById('btnFinalizar');
 
+let selectedPaymentMethod = 'Transferencia';
+
+// Actualizar carrito
 function updateCart(){
   cartOffcanvas.innerHTML = '';
   let total = 0;
-  cart.forEach((item)=>{
+  cart.forEach((item, index) => {
     total += item.price * item.quantity;
     const li = document.createElement('li');
-    li.className = "list-group-item d-flex justify-content-between align-items-center";
-    li.textContent = `${item.name} x ${item.quantity} = $${item.price * item.quantity}`;
+    li.innerHTML = `
+      ${item.name} x ${item.quantity} = $${item.price * item.quantity}
+      <div>
+        <button onclick="changeQuantity(${index}, -1)">-</button>
+        <button onclick="changeQuantity(${index}, 1)">+</button>
+      </div>
+    `;
     cartOffcanvas.appendChild(li);
   });
   totalOffcanvas.textContent = `Total: $${total}`;
-  cartCount.textContent = cart.reduce((a,i)=>a+i.quantity,0);
+  cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
 }
 
-document.getElementById('addToCartBtn').addEventListener('click',()=>{
-  const quantity = Number(document.getElementById('quantity').value);
-  const existing = cart.find(i=>i.name==="Yerba Tradicional Castiello");
-  if(existing) existing.quantity += quantity;
-  else cart.push({name:"Yerba Tradicional Castiello", price:3000, quantity});
+// Cambiar cantidad en carrito
+function changeQuantity(index, delta){
+  cart[index].quantity += delta;
+  if(cart[index].quantity <= 0) cart.splice(index, 1);
   updateCart();
+}
+
+// Click en productos abre su página
+document.querySelectorAll('.product-card').forEach(card => {
+  card.addEventListener('click', () => {
+    window.location.href = card.getAttribute('data-url');
+  });
 });
+
+// Agregar al carrito
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.stopPropagation(); 
+    const userDataJSON = localStorage.getItem('userData');
+    if(!userDataJSON){
+      alert('Debes iniciar sesión para agregar productos al carrito.');
+      window.location.href = 'inicio.sesion.html';
+      return;
+    }
+    const name = button.getAttribute('data-name');
+    const price = Number(button.getAttribute('data-price'));
+    const existingItem = cart.find(item => item.name === name);
+    if(existingItem){
+      existingItem.quantity++;
+    } else {
+      cart.push({name, price, quantity:1});
+    }
+    updateCart();
+  });
+});
+
+// Finalizar compra
+btnFinalizar.addEventListener('click', () => {
+  const userDataJSON = localStorage.getItem('userData');
+  if(!userDataJSON){
+    alert('Debes iniciar sesión para finalizar la compra.');
+    window.location.href = 'inicio.sesion.html';
+    return;
+  }
+  if(cart.length === 0){
+    alert('El carrito está vacío.');
+    return;
+  }
+
+  const userData = JSON.parse(userDataJSON);
+  hiddenName.value = userData.name;
+  hiddenEmail.value = userData.email;
+  hiddenPhone.value = userData.cellphone;
+  pedidoResumen.value = cart.map(i => `${i.name} x ${i.quantity} = $${i.price * i.quantity}`).join('\n');
+  pagoMetodo.value = selectedPaymentMethod;
+
+  orderForm.submit();
+});
+
+updateCart();
 </script>
 
 </body>

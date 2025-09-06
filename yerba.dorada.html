@@ -64,9 +64,9 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
     
     <!-- Imágenes -->
     <div class="col-md-6">
-      <img id="mainImage" src="img/dorada.png" alt="Yerba Dorada" class="product-main-img">
+      <img id="mainImage" src="img/dorada.jng" alt="Yerba Dorada" class="product-main-img">
       <div class="d-flex">
-        <img src="img/dorada.png" class="product-thumb active" onclick="changeImage(this)">
+        <img src="img/dorada.jng" class="product-thumb active" onclick="changeImage(this)">
         <img src="img/dorada.jpg" class="product-thumb" onclick="changeImage(this)">
         <img src="img/dorada.jpg" class="product-thumb" onclick="changeImage(this)">
       </div>
@@ -120,5 +120,26 @@ function changeImage(el){
 
 <!-- Carrito global -->
 <script src="js/carrito.js"></script>
+<script>
+// Inicializar carrito cuando cargue la página
+document.addEventListener("DOMContentLoaded", () => {
+  updateCart();
+
+  document.querySelector(".add-to-cart").addEventListener("click", () => {
+    const name = "Yerba Dorada Castiello";
+    const price = 3500;
+    const quantity = parseInt(document.getElementById("quantity").value);
+
+    let existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      cart.push({ name, price, quantity });
+    }
+
+    updateCart();
+  });
+});
+</script>
 </body>
 </html>

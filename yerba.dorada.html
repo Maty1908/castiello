@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Yerba Tradicional - Yerbamate Castiello</title>
+<title>Yerba Dorada - Yerbamate Castiello</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -64,7 +64,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
     
     <!-- Imágenes -->
     <div class="col-md-6">
-      <img id="mainImage" src="img/dorada.png" alt="Yerba Tradicional" class="product-main-img">
+      <img id="mainImage" src="img/dorada.png" alt="Yerba Dorada" class="product-main-img">
       <div class="d-flex">
         <img src="img/dorada.png" class="product-thumb active" onclick="changeImage(this)">
         <img src="img/dorada.jpg" class="product-thumb" onclick="changeImage(this)">
@@ -74,7 +74,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 
     <!-- Información del Producto -->
     <div class="col-md-6">
-      <h1 style="color: var(--color-principal);">Yerba Especial</h1>
+      <h1 style="color: var(--color-principal);">Yerba Dorada</h1>
       <p>Yerba mate con un proceso natural de estacionado durante 18 y 24 meses.</p>
       <p style="color: var(--color-principal); font-size:1.8rem; font-weight:700;">$3.500</p>
 
@@ -83,7 +83,12 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         <input type="number" id="quantity" class="form-control w-25" value="1" min="1">
       </div>
 
-      <button class="btn btn-buy" id="addToCartBtn">Agregar al carrito</button>
+      <button 
+        class="btn btn-buy add-to-cart" 
+        data-name="Yerba Dorada Castiello" 
+        data-price="3500">
+        Agregar al carrito
+      </button>
 
       <hr class="my-4">
 
@@ -103,42 +108,17 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script para cambio de imágenes -->
 <script>
-// Cambiar imagen principal
 function changeImage(el){
   document.getElementById('mainImage').src = el.src;
   document.querySelectorAll('.product-thumb').forEach(img => img.classList.remove('active'));
   el.classList.add('active');
 }
-
-// Carrito simple
-const cart = [];
-const cartOffcanvas = document.getElementById('cart-offcanvas');
-const totalOffcanvas = document.getElementById('total-offcanvas');
-const cartCount = document.getElementById('cart-count');
-
-function updateCart(){
-  cartOffcanvas.innerHTML = '';
-  let total = 0;
-  cart.forEach((item)=>{
-    total += item.price * item.quantity;
-    const li = document.createElement('li');
-    li.className = "list-group-item d-flex justify-content-between align-items-center";
-    li.textContent = `${item.name} x ${item.quantity} = $${item.price * item.quantity}`;
-    cartOffcanvas.appendChild(li);
-  });
-  totalOffcanvas.textContent = `Total: $${total}`;
-  cartCount.textContent = cart.reduce((a,i)=>a+i.quantity,0);
-}
-
-document.getElementById('addToCartBtn').addEventListener('click',()=>{
-  const quantity = Number(document.getElementById('quantity').value);
-  const existing = cart.find(i=>i.name==="Yerba Tradicional Castiello");
-  if(existing) existing.quantity += quantity;
-  else cart.push({name:"Yerba Tradicional Castiello", price:3000, quantity});
-  updateCart();
-});
 </script>
 
+<!-- Carrito global -->
+<script src="js/carrito.js"></script>
 </body>
 </html>

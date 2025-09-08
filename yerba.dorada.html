@@ -108,6 +108,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="carrito.js"></script>
 
 <!-- Script para cambio de imágenes -->
 <script>
@@ -116,28 +117,15 @@ function changeImage(el){
   document.querySelectorAll('.product-thumb').forEach(img => img.classList.remove('active'));
   el.classList.add('active');
 }
-</script>
 
-<!-- Carrito global -->
-<script src="js/carrito.js"></script>
-<script>
-// Inicializar carrito cuando cargue la página
+// Agregar producto al carrito
 document.addEventListener("DOMContentLoaded", () => {
-  updateCart();
-
-  document.querySelector(".add-to-cart").addEventListener("click", () => {
+  const addButton = document.querySelector(".add-to-cart");
+  addButton.addEventListener("click", () => {
     const name = "Yerba Dorada Castiello";
     const price = 3500;
     const quantity = parseInt(document.getElementById("quantity").value);
-
-    let existingItem = cart.find(item => item.name === name);
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      cart.push({ name, price, quantity });
-    }
-
-    updateCart();
+    addToCart(name, price, quantity);
   });
 });
 </script>

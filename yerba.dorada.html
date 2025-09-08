@@ -3,32 +3,53 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Yerba Dorada - Yerbamate Castiello</title>
+<title>Yerba Dorada - Tienda Online</title>
+<link rel="icon" href="img/logo.png" type="image/png">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root { --color-principal: #e1221c; --color-secundario: #F8DB5E; }
-body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; margin:0; min-height:100vh; display:flex; flex-direction:column;}
+body { font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
 h1,h2,h5,.navbar-brand { font-family: 'Alfa Slab One', cursive !important; }
-nav.navbar { box-shadow:0 4px 6px rgba(0,0,0,0.1); background-color: var(--color-principal) !important; }
-.navbar-brand { font-size:1.6rem; color:#fff !important; letter-spacing:2px; user-select:none; }
-#cart-count { font-size:0.7rem; padding:0.25em 0.5em; background-color:#fff; color: var(--color-principal); border-radius:50%; margin-left:5px; display:inline-block; text-align:center; }
+nav.navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: var(--color-principal) !important; }
+.navbar-brand { font-size: 1.6rem; color: #fff !important; letter-spacing: 2px; user-select: none; }
+#cart-count { font-size: 0.7rem; padding: 0.25em 0.5em; background-color: #fff; color: var(--color-principal); border-radius: 50%; margin-left:5px; display:inline-block; text-align:center; }
 .product-main-img { width:100%; border-radius:10px; margin-bottom:15px; object-fit:cover; }
 .product-thumb { width:70px; height:70px; object-fit:cover; border:2px solid transparent; border-radius:8px; cursor:pointer; margin-right:10px; }
 .product-thumb.active { border-color: var(--color-principal); }
-.btn-buy { background-color: var(--color-principal); color:white; border:none; border-radius:50px; padding:10px 20px; font-weight:600; transition:0.3s; }
-.btn-buy:hover { background-color:#9c3a44; }
-footer { background-color: var(--color-principal); color: var(--color-secundario); padding:15px 0; text-align:center; font-weight:500; font-size:0.85rem; letter-spacing:0.05em; margin-top:auto; box-shadow:0 -3px 8px rgba(203,73,85,0.5);}
+.btn-add { background-color: var(--color-principal); border: none; font-weight: 600; font-size: 1rem; transition: background-color 0.3s ease; color: white; border-radius: 50px; padding: 8px 16px; user-select: none; }
+.btn-add:hover { background-color: #9c3a44; }
+#cart-offcanvas li { font-weight: 600; font-size: 1rem; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; background-color: #fff6c398; display: flex; justify-content: space-between; align-items: center; color: var(--color-principal); border: 2px solid var(--color-principal); flex-wrap: wrap; }
+#cart-offcanvas li button { background-color: var(--color-principal); color:white; border:none; padding:3px 8px; border-radius:5px; margin:2px; cursor:pointer; }
+#cart-offcanvas li button:hover { background-color:#9c3a44; }
+#total-offcanvas { font-size: 1.3rem; color: var(--color-principal); font-weight: 700; text-align: center; margin-top: 10px; user-select: none; }
+footer { background-color: var(--color-principal); color: var(--color-secundario); padding: 15px 0; text-align: center; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em; user-select: none; margin-top: auto; box-shadow: 0 -3px 8px rgba(203,73,85,0.5); }
+#offcanvasCarrito { width: 100%; max-width: 500px; }
+.btn-finalizar { background-color: var(--color-principal); color:white; border:none; border-radius:50px; padding:10px 18px; }
+.btn-finalizar:hover { background-color:#9c3a44; }
+
+/* Responsive */
+@media (max-width: 992px) { .card-title, .card-text { font-size: 1.1rem; } }
+@media (max-width: 768px) {
+  .navbar-brand { font-size: 1.3rem; flex-direction: column; text-align: center; }
+  .navbar-brand img { margin-bottom: 5px; }
+  #cart-count { font-size: 0.65rem; }
+  .btn-add { font-size: 0.95rem; padding: 6px 12px; }
+}
+@media (max-width: 576px) {
+  .navbar-brand { margin:0 auto; display:flex; flex-direction:column; align-items:center; }
+  .navbar-brand img { margin-bottom:5px; }
+  .navbar-toggler { position:absolute; right:10px; top:10px; }
+}
 </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid px-3">
     <a class="navbar-brand d-flex align-items-center" href="index.html">
       <img src="img/logo.catiello.png" alt="Logo" height="50" class="d-inline-block align-text-top me-2">
-      Yerba Mate Castiello
+      <h1 style="font-weight: 100" >che Castiello</h1>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -36,43 +57,39 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto" style="align-items:center;">
         <li class="nav-item"><a class="nav-link active" href="inicio.sesion.html">Iniciar sesión</a></li>
-        <li class="nav-item"><a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito">
-          Carrito <span id="cart-count">0</span>
-          <img src="img/carrito.png" style="width:28px;margin-left:5px;">
-        </a></li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" href="#" id="btnCarrito" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCarrito">
+            Carrito <span id="cart-count">0</span>
+            <img src="img/carrito.png" style="width:28px;margin-left:5px;">
+          </a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- Offcanvas Carrito -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito">
+<!-- Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCarrito" aria-labelledby="offcanvasCarritoLabel">
   <div class="offcanvas-header">
-    <h5>Tu Carrito</h5>
+    <h5 id="offcanvasCarritoLabel">Tu Carrito</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body">
     <ul id="cart-offcanvas" class="list-group mb-3"></ul>
     <p id="total-offcanvas">Total: $0</p>
-    <button type="button" id="btnFinalizar" class="btn btn-buy w-100 mt-3">Finalizar compra</button>
+    <button type="button" id="btnFinalizar" class="btn btn-finalizar w-100 mt-3">Finalizar compra</button>
   </div>
 </div>
 
-<!-- Página de Producto -->
-<main class="container my-5">
+<main class="container mb-5 mt-5">
   <div class="row g-5">
-    
-    <!-- Imágenes -->
     <div class="col-md-6">
       <img id="mainImage" src="img/dorada.png" alt="Yerba Dorada" class="product-main-img">
       <div class="d-flex">
         <img src="img/dorada.png" class="product-thumb active" onclick="changeImage(this)">
         <img src="img/dorada.jpg" class="product-thumb" onclick="changeImage(this)">
-        <img src="img/dorada.jpg" class="product-thumb" onclick="changeImage(this)">
       </div>
     </div>
-
-    <!-- Información del Producto -->
     <div class="col-md-6">
       <h1 style="color: var(--color-principal);">Yerba Dorada</h1>
       <p>Yerba mate con un proceso natural de estacionado durante 18 y 24 meses.</p>
@@ -84,14 +101,13 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
       </div>
 
       <button 
-        class="btn btn-buy add-to-cart" 
+        class="btn btn-add add-to-cart" 
         data-name="Yerba Dorada Castiello" 
         data-price="3500">
         Agregar al carrito
       </button>
 
       <hr class="my-4">
-
       <h5>Detalles:</h5>
       <ul>
         <li>Sabor auténtico y tradicional</li>
@@ -104,13 +120,11 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 </main>
 
 <footer>
-  &copy; 2025 Yerba Mate Castiello - Yerba de tradición
+  <div class="container">&copy; 2025 Che Castiello - Yerba de tradición</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="carrito.js"></script>
-
-<!-- Script para cambio de imágenes -->
 <script>
 function changeImage(el){
   document.getElementById('mainImage').src = el.src;

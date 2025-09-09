@@ -13,15 +13,23 @@
       font-family: 'Segoe UI', sans-serif;
     }
     .alias-box {
-      background: white;
-      border: 2px solid #dc3545;
-      border-radius: 10px;
-      padding: 20px;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 15px;
       display: inline-block;
-      margin-top: 20px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.12);
+      text-align: left;
     }
     .alias-box h2 {
       color: #dc3545;
+      margin-bottom: 15px;
+    }
+    .alias-box p {
+      font-size: 1.1rem;
+      margin: 5px 0;
+    }
+    .btn-back {
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -32,24 +40,27 @@
   <div class="alias-box">
     <h2>Transferencia</h2>
     <p><strong>Alias:</strong> mate.castiello.mp</p>
-    <p><strong>Monto a pagar:</strong> $<span id="monto">...</span></p>
+    <p><strong>Resumen del pedido:</strong></p>
+    <pre id="resumen" style="font-size:1rem;"></pre>
+    <p><strong>Monto total a pagar:</strong> $<span id="monto"></span></p>
     <p>Por favor, enviá el comprobante al correo o WhatsApp.</p>
   </div>
   
-  <br>
-  <a href="index.html" class="btn btn-danger mt-4">Volver a la tienda</a>
-    
+  <a href="index.html" class="btn btn-danger btn-back">Volver a la tienda</a>
+
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      let monto = localStorage.getItem("montoTotal");
+    // Recuperar datos del pedido desde localStorage
+    const montoTotal = localStorage.getItem('montoTotal') || 0;
+    const resumenPedido = localStorage.getItem('resumenPedido') || 'No hay items en el pedido.';
 
-      // Si no encuentra nada en localStorage
-      if (!monto || isNaN(monto)) {
-        monto = "0";
-      }
+    // Mostrar en la página
+    document.getElementById('monto').textContent = montoTotal;
+    document.getElementById('resumen').textContent = resumenPedido;
 
-      document.getElementById("monto").textContent = monto;
-    });
+    // Limpiar carrito y datos del pedido de localStorage si querés
+    // localStorage.removeItem('cart');
+    // localStorage.removeItem('montoTotal');
+    // localStorage.removeItem('resumenPedido');
   </script>
 </body>
 </html>

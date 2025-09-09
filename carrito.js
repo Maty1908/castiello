@@ -23,14 +23,13 @@ function updateCart() {
   // Limpiar carrito actual
   cartList.innerHTML = "";
 
-  // Si el carrito está vacío
   if (cart.length === 0) {
     cartList.innerHTML = "<p>Tu carrito está vacío</p>";
     totalElem.textContent = "$0";
     return;
   }
 
-  // Agregar productos al carrito
+  // Agregar productos al carrito y calcular total
   let total = 0;
   cart.forEach((item, index) => {
     const itemTotal = item.price * item.quantity;
@@ -49,16 +48,8 @@ function updateCart() {
   totalElem.textContent = `$${total.toFixed(2)}`;
 }
 
-// Función para eliminar un producto del carrito
-function removeItem(index) {
-  cart.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
-}
-
-// Función para agregar productos al carrito
+// Función para agregar un producto al carrito
 function addToCart(product) {
-  // Verificar si ya existe el producto en el carrito
   const existing = cart.find(item => item.id === product.id);
   if (existing) {
     existing.quantity += 1;
@@ -70,7 +61,14 @@ function addToCart(product) {
   updateCart();
 }
 
-// Función para limpiar el carrito (por ejemplo después de pagar)
+// Función para eliminar un producto del carrito
+function removeItem(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCart();
+}
+
+// Función para limpiar todo el carrito
 function clearCart() {
   cart = [];
   localStorage.setItem("cart", JSON.stringify(cart));

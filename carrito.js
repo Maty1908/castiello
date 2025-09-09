@@ -1,46 +1,36 @@
-// ---------- VARIABLES ----------
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-const cartOffcanvas = document.getElementById('cart-offcanvas');
-const totalOffcanvas = document.getElementById('total-offcanvas');
-const cartCount = document.getElementById('cart-count');
-const btnFinalizar = document.getElementById('btnFinalizar');
+// carrito.js
 
-let selectedPaymentMethod = 'Transferencia';
+// Inicializar carrito desde localStorage o vacío
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ---------- ACTUALIZAR CARRITO ----------
-function updateCart(){
-  if(!cartOffcanvas || !totalOffcanvas || !cartCount) return;
+// Función para actualizar carrito en pantalla y en localStorage
+function updateCart() {
+  const cartList = document.getElementById("cart-offcanvas");
+  const totalElem = document.getElementById("total-offcanvas");
+  cartList.innerHTML = "";
 
-  cartOffcanvas.innerHTML = '';
   let total = 0;
+
   cart.forEach((item, index) => {
-    total += item.price * item.quantity;
-    const li = document.createElement('li');
+    const li = document.createElement("li");
     li.innerHTML = `
-      ${item.name} x ${item.quantity} = $${item.price * item.quantity}
+      ${item.name} x ${item.quantity} - $${item.price * item.quantity}
       <div>
-        <button onclick="changeQuantity(${index}, -1)">-</button>
-        <button onclick="changeQuantity(${index}, 1)">+</button>
+        <button onclick="removeItem(${index})">Eliminar</button>
       </div>
     `;
-    cartOffcanvas.appendChild(li);
+    cartList.appendChild(li);
+    total += item.price * item.quantity;
   });
-  totalOffcanvas.textContent = `Total: $${total}`;
-  cartCount.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
-  localStorage.setItem('cart', JSON.stringify(cart));
+
+  totalElem.textContent = `Total: $${total}`;
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// ---------- CAMBIAR CANTIDAD ----------
-function changeQuantity(index, delta){
-  cart[index].quantity += delta;
-  if(cart[index].quantity <= 0) cart.splice(index, 1);
-  updateCart();
-}
-
-// ---------- AGREGAR PRODUCTO ----------
-function addToCart(name, price, quantity = 1){
-  const existingItem = cart.find(item => item.name === name);
-  if(existingItem){
+// Función para agregar producto
+function addToCart(name, price, quantity) {
+  let existingItem = cart.find(item => item.name === name);
+  if (existingItem) {
     existingItem.quantity += quantity;
   } else {
     cart.push({ name, price, quantity });
@@ -48,17 +38,63 @@ function addToCart(name, price, quantity = 1){
   updateCart();
 }
 
-// ---------- FINALIZAR COMPRA ----------
-if(btnFinalizar){
-  btnFinalizar.addEventListener('click', () => {
-    if(cart.length === 0){
-      alert('El carrito está vacío.');
-      return;
-    }
-    alert("Simulación de compra. Carrito enviado.");
-    // Aquí podés enviar los datos al backend o a formsubmit
-  });
+// Función para eliminar producto
+function removeItem(index) {
+  cart.splice(index, 1);
+  updateCart();
 }
 
-// ---------- CARGAR AL INICIO ----------
-document.addEventListener("DOMContentLoaded", updateCart);
+// Función para enviar pedido por FormSubmit
+function enviarPedido() {
+  if (cart.length === 0) {
+    alert("El carrito está vacío.");
+    return;
+  }
+
+  const form = document.getElementById("order-form");
+  if (!form) return;
+
+  // Ejemplo: rellenar campos del formulario (modifica según tus inputs)
+  const hiddenName = document.getElementById("hiddenName");
+  const hiddenEmail = document.getElementById("hiddenEmail");
+  const hiddenPhone = document.getElementById("hiddenPhone");
+  const pedidoResumen = document.getElementById("pedidoResumen");
+  const pagoMetodo = document.getElementById("pagoMetodo");
+
+  // Aquí puedes tomar valores de un formulario real si quieres
+  hiddenName.value = prompt("Nombre y Apellido") || "Cliente Anónimo";
+  hiddenEmail.value = prompt("Email") || "email@dominio.com";
+  hiddenPhone.value = prompt("Celular") || "0000000000";
+  pagoMetodo.value = prompt("Método de pago") || "No especificado";
+
+  // Generar resumen del pedido
+  pedidoResumen.value = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");
+
+  // Enviar formulario
+  form.submit();
+
+  // Limpiar carrito después de enviar
+  cart = [];
+  updateCart();
+}
+
+// Inicializar eventos al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  updateCart();
+
+  // Botones de agregar al carrito
+  document.querySelectorAll(".add-to-cart").forEach(button => {
+    button.addEventListener("click", (e) => {
+      e.stopPropagation(); // evitar que card haga redirect
+      const name = button.getAttribute("data-name");
+      const price = Number(button.getAttribute("data-price"));
+      addToCart(name, price, 1);
+    });
+  });
+
+  // Botón finalizar compra
+  const btnFinalizar = document.getElementById("btnFinalizar");
+  if (btnFinalizar) {
+    btnFinalizar.addEventListener("click", enviarPedido);
+  }
+});

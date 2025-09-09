@@ -5,8 +5,8 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 // Función para revisar login y redirigir si no está logueado
 function checkLoginOrRedirect() {
-  const loggedIn = localStorage.getItem("loggedIn");
-  if (!loggedIn || loggedIn === "false") {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  if (!userData) {
     window.location.href = "inicio.sesion.html";
     return false;
   }
@@ -81,10 +81,11 @@ function enviarPedido() {
   const pedidoResumen = document.getElementById("pedidoResumen");
   const pagoMetodo = document.getElementById("pagoMetodo");
 
-  // Tomar datos de usuario desde localStorage
-  hiddenName.value = localStorage.getItem("userName") || "Cliente Anónimo";
-  hiddenEmail.value = localStorage.getItem("userEmail") || "email@dominio.com";
-  hiddenPhone.value = localStorage.getItem("userPhone") || "0000000000";
+  // Tomar datos del usuario desde localStorage
+  const userData = JSON.parse(localStorage.getItem("userData")) || {};
+  hiddenName.value = userData.name || "Cliente Anónimo";
+  hiddenEmail.value = userData.email || "email@dominio.com";
+  hiddenPhone.value = userData.phone || "0000000000";
 
   pagoMetodo.value = "Transferencia"; // obligatorio
 

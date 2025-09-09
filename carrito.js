@@ -13,7 +13,7 @@ function checkLoginOrRedirect() {
   return true;
 }
 
-// Función para actualizar carrito en pantalla, mini contador y localStorage
+// Función para actualizar carrito en pantalla, contador y localStorage
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
@@ -24,16 +24,21 @@ function updateCart() {
   let totalItems = 0;
 
   cart.forEach((item, index) => {
-    if (cartList) {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        ${item.name} x ${item.quantity} - $${item.price * item.quantity}
-        <div>
-          <button onclick="removeItem(${index})">Eliminar</button>
-        </div>
-      `;
-      cartList.appendChild(li);
-    }
+    const li = document.createElement("li");
+    li.classList.add("d-flex", "justify-content-between", "align-items-center");
+
+    li.innerHTML = `
+      <span class="cart-item-name">${item.name}</span>
+      <div class="cart-item-controls">
+        <button onclick="changeQuantity(${index}, -1)">-</button>
+        <span>${item.quantity}</span>
+        <button onclick="changeQuantity(${index}, 1)">+</button>
+        <span class="cart-item-price">$${item.price * item.quantity}</span>
+        <button onclick="removeItem(${index})">Eliminar</button>
+      </div>
+    `;
+    cartList.appendChild(li);
+
     total += item.price * item.quantity;
     totalItems += item.quantity;
   });
@@ -72,6 +77,13 @@ function removeItem(index) {
   updateCart();
 }
 
+// Función para cambiar cantidad (+/-)
+function changeQuantity(index, change) {
+  cart[index].quantity += change;
+  if (cart[index].quantity < 1) cart[index].quantity = 1;
+  updateCart();
+}
+
 // Función para enviar pedido
 function enviarPedido() {
   if (cart.length === 0) {
@@ -99,10 +111,11 @@ function enviarPedido() {
 
   // Guardar resumen del pedido y total
   const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
-  pedidoResumen.value = `${resumen}\n\nTotal: $${cart.reduce((acc, i) => acc + i.price * i.quantity, 0)}`;
+  const totalFinal = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
+  pedidoResumen.value = `${resumen}\n\nTotal: $${totalFinal}`;
 
   // Guardar en localStorage para la página de gracias
-  localStorage.setItem("montoTotal", cart.reduce((acc, i) => acc + i.price * i.quantity, 0));
+  localStorage.setItem("montoTotal", totalFinal);
   localStorage.setItem("resumenPedido", resumen);
 
   form.submit();

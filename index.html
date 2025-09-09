@@ -8,21 +8,99 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root { --color-principal: #e1221c; --color-secundario: #F8DB5E; --color-principal-oscuro: #9c3a44; }
-body { font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
-h1,h2,h5,.navbar-brand { font-family: 'Alfa Slab One', cursive !important; }
-nav.navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: var(--color-principal) !important; }
-.navbar-brand { font-size: 1.6rem; color: #fff !important; letter-spacing: 2px; user-select: none; }
-#cart-count { font-size: 0.7rem; padding: 0.25em 0.5em; background-color: #fff; color: var(--color-principal); border-radius: 50%; margin-left:5px; display:inline-block; text-align:center; }
+:root {
+  --color-principal: #e1221c;
+  --color-secundario: #F8DB5E;
+  --color-principal-oscuro: #9c3a44;
+}
+body {
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+h1,h2,h5,.navbar-brand {
+  font-family: 'Alfa Slab One', cursive !important;
+}
+nav.navbar {
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background-color: var(--color-principal) !important;
+}
+.navbar-brand {
+  font-size: 1.6rem;
+  color: #fff !important;
+  letter-spacing: 2px;
+  user-select: none;
+}
+#cart-count {
+  font-size: 0.7rem;
+  padding: 0.25em 0.5em;
+  background-color: #fff;
+  color: var(--color-principal);
+  border-radius: 50%;
+  margin-left:5px;
+  display:inline-block;
+  text-align:center;
+}
 
 /* PRODUCTOS */
-.product-card { border-radius: 15px; overflow: hidden; box-shadow: 0 8px 15px rgba(0,0,0,0.12); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; background: white; display: flex; flex-direction: column; height: 100%; border: 3px solid var(--color-secundario); }
-.product-card:hover { transform: scale(1.03); box-shadow: 0 15px 25px var(--color-principal); border-color: var(--color-principal); z-index: 10; }
-.product-img { width: 100%; aspect-ratio: 4/3; border-bottom: 5px solid var(--color-principal); object-fit: cover; }
-.card-body { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-.card-title { font-weight: 700; color: var(--color-principal); margin-bottom: 0.5rem; font-size: 1.2rem; user-select: none; }
-.card-text { flex-grow: 1; color: #7f574c; font-size: 0.95rem; margin-bottom: 1rem; user-select: none; }
-.btn-add { background-color: var(--color-principal); border: none; font-weight: 600; font-size: 1rem; transition: background-color 0.3s ease; color: white; border-radius: 50px; padding: 8px 16px; user-select: none; }
+.product-card {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 3px solid var(--color-secundario);
+}
+.product-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 15px 25px var(--color-principal);
+  border-color: var(--color-principal);
+  z-index: 10;
+}
+.product-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-bottom: 5px solid var(--color-principal);
+  object-fit: cover;
+}
+.card-body {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card-title {
+  font-weight: 700;
+  color: var(--color-principal);
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  user-select: none;
+}
+.card-text {
+  flex-grow: 1;
+  color: #7f574c;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  user-select: none;
+}
+.btn-add {
+  background-color: var(--color-principal);
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  color: white;
+  border-radius: 50px;
+  padding: 8px 16px;
+  user-select: none;
+}
 .btn-add:hover { background-color: var(--color-principal-oscuro); }
 
 /* CARRITO */
@@ -40,7 +118,15 @@ nav.navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: var(--colo
 }
 .cart-item-name { flex: 1; font-weight: 600; color: var(--color-principal); }
 .cart-item-controls { display: flex; align-items: center; gap: 5px; }
-.cart-item-controls button { background-color: var(--color-principal); color: white; border: none; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-weight: 600; }
+.cart-item-controls button {
+  background-color: var(--color-principal);
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
 .cart-item-controls button:hover { background-color: var(--color-principal-oscuro); }
 .cart-item-price { font-weight: 700; color: var(--color-principal); min-width: 50px; text-align: right; }
 #total-offcanvas { font-size: 1.3rem; color: var(--color-principal); font-weight: 700; text-align: center; margin-top: 10px; user-select: none; }
@@ -95,10 +181,8 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 
 <main class="container mb-5 mt-5">
 <section id="productos" class="mb-5">
-  <h2 class="text-center mb-4" style="color: var(--color-principal); font-weight: 300;">Nuestras Variedades</h2>
+  <!-- Producto 1 -->
   <div class="row g-4">
-
-    <!-- Producto 1 -->
     <div class="col-md-4 col-sm-6 col-12">
       <div class="product-card">
         <img src="img/roja.png" class="product-img" />
@@ -109,7 +193,6 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         </div>
       </div>
     </div>
-
     <!-- Producto 2 -->
     <div class="col-md-4 col-sm-6 col-12">
       <div class="product-card">
@@ -121,7 +204,6 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         </div>
       </div>
     </div>
-
     <!-- Producto 3 -->
     <div class="col-md-4 col-sm-6 col-12">
       <div class="product-card">
@@ -133,7 +215,6 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -156,9 +237,10 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Carrito funcional con + y - y subtotal
+// Inicializar carrito
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+// Verificar login
 function checkLoginOrRedirect() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   if (!userData) {
@@ -168,14 +250,13 @@ function checkLoginOrRedirect() {
   return true;
 }
 
+// Actualizar carrito
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
   const cartCount = document.getElementById("cart-count");
-
   if (cartList) cartList.innerHTML = "";
-  let total = 0;
-  let totalItems = 0;
+  let total = 0, totalItems = 0;
 
   cart.forEach((item, index) => {
     const li = document.createElement("li");
@@ -189,23 +270,23 @@ function updateCart() {
       <span class="cart-item-price">$${item.price * item.quantity}</span>
     `;
     cartList.appendChild(li);
-
     total += item.price * item.quantity;
     totalItems += item.quantity;
   });
 
   if (totalElem) totalElem.textContent = `Total: $${total}`;
   if (cartCount) cartCount.textContent = totalItems;
-
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("montoTotal", total);
   const resumen = cart.map(i => `${i.quantity} x ${i.name} - $${i.price * i.quantity}`).join("\n");
   localStorage.setItem("resumenPedido", resumen);
 }
 
+// Funciones de cantidad
 function increaseQty(index) { cart[index].quantity++; updateCart(); }
 function decreaseQty(index) { if(cart[index].quantity>1){cart[index].quantity--;}else{cart.splice(index,1);} updateCart(); }
 
+// Agregar al carrito
 function addToCart(name, price, quantity = 1) {
   if (!checkLoginOrRedirect()) return;
   let existingItem = cart.find(i => i.name === name);
@@ -214,6 +295,7 @@ function addToCart(name, price, quantity = 1) {
   updateCart();
 }
 
+// Enviar pedido
 function enviarPedido() {
   if (cart.length === 0) { alert("El carrito está vacío."); return; }
   if (!checkLoginOrRedirect()) return;
@@ -227,34 +309,13 @@ function enviarPedido() {
 
   const resumen = cart.map(i => `${i.quantity} x ${i.name} - $${i.price * i.quantity}`).join("\n");
   document.getElementById("pedidoResumen").value = `${resumen}\n\nTotal: $${cart.reduce((acc,i)=>acc+i.price*i.quantity,0)}`;
-
   localStorage.setItem("montoTotal", cart.reduce((acc,i)=>acc+i.price*i.quantity,0));
   localStorage.setItem("resumenPedido", resumen);
 
-  function enviarPedido() {
-  if (cart.length === 0) { alert("El carrito está vacío."); return; }
-  if (!checkLoginOrRedirect()) return;
-
-  const form = document.getElementById("order-form");
-  const userData = JSON.parse(localStorage.getItem("userData")) || {};
-  document.getElementById("hiddenName").value = userData.name || "Cliente Anónimo";
-  document.getElementById("hiddenEmail").value = userData.email || "email@dominio.com";
-  document.getElementById("hiddenPhone").value = userData.phone || "0000000000";
-  document.getElementById("pagoMetodo").value = "Transferencia";
-
-  const resumen = cart.map(i => `${i.quantity} x ${i.name} - $${i.price * i.quantity}`).join("\n");
-  document.getElementById("pedidoResumen").value = `${resumen}\n\nTotal: $${cart.reduce((acc,i)=>acc+i.price*i.quantity,0)}`;
-
-  localStorage.setItem("montoTotal", cart.reduce((acc,i)=>acc+i.price*i.quantity,0));
-  localStorage.setItem("resumenPedido", resumen);
-
-  // **Enviar el formulario sin borrar el carrito**
   form.submit();
-  // cart = []; // <- eliminar esta línea
-  // updateCart(); // <- eliminar esta línea
-}
 }
 
+// Inicializar eventos
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
   document.querySelectorAll(".add-to-cart").forEach(btn => {

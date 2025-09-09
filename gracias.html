@@ -7,98 +7,131 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
+      background-color: #f5f5f5;
+      font-family: 'Montserrat', sans-serif;
       padding: 50px 20px;
+      display: flex;
+      justify-content: center;
     }
-
-    .container-box {
+    .card-thanks {
       background-color: #fff;
-      border-radius: 12px;
-      padding: 30px 20px;
-      max-width: 600px;
-      margin: 40px auto;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      border-radius: 15px;
+      max-width: 700px;
+      width: 100%;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .card-thanks h1 {
+      color: #dc3545;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    .card-thanks p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      margin-bottom: 20px;
+      border-collapse: collapse;
+    }
+    table th, table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
       text-align: left;
     }
-
-    h1 {
-      color: #e1221c;
-      margin-bottom: 15px;
-    }
-
-    .alias-box {
-      background-color: #fdf5f0;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-      border: 2px solid #e1221c;
-    }
-
-    .alias-box h2 {
+    .total {
+      font-size: 1.4rem;
+      font-weight: 700;
       color: #dc3545;
-      margin-bottom: 15px;
-      font-size: 1.3rem;
+      margin-top: 10px;
     }
-
-    .alias-box p, .alias-box pre {
-      font-size: 1rem;
-      color: #333;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    .btn-home {
-      margin-top: 30px;
-      background-color: #e1221c;
-      color: #fff;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 50px;
-      text-decoration: none;
+    .alias {
+      background-color: #f8f9fa;
+      padding: 12px;
+      border-radius: 8px;
       font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
       display: inline-block;
     }
-
+    .btn-home {
+      display: inline-block;
+      padding: 10px 25px;
+      background-color: #dc3545;
+      color: #fff;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
     .btn-home:hover {
-      background-color: #9c3a44;
+      background-color: #a71d2a;
     }
   </style>
 </head>
 <body>
+
+<div class="card-thanks">
   <h1>¡Gracias por tu compra!</h1>
-  <p>Tu pedido fue enviado correctamente y pronto nos pondremos en contacto.</p>
+  <p>Tu pedido fue recibido correctamente.</p>
 
-  <div class="container-box">
-    <div class="alias-box">
-      <h2>Alias para transferencia</h2>
-      <p><strong>Alias:</strong> mate.castiello.mp</p>
-      <p>Por favor realiza la transferencia y envía el comprobante al WhatsApp o correo.</p>
-    </div>
+  <h2>Resumen del Pedido</h2>
+  <table id="tabla-pedido">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Aquí se insertarán los productos -->
+    </tbody>
+  </table>
 
-    <div class="alias-box">
-      <h2>Resumen del pedido</h2>
-      <pre id="resumen">Cargando...</pre>
-      <p><strong>Monto total a pagar:</strong> $<span id="monto">0</span></p>
-    </div>
+  <div class="total">Total a pagar: $<span id="monto">0</span></div>
 
-    <a href="index.html" class="btn-home">Volver a la tienda</a>
-  </div>
+  <p>Para realizar la transferencia, utiliza el siguiente alias:</p>
+  <div class="alias">mate.castiello.mp</div>
+
+  <br>
+  <a href="index.html" class="btn-home">Volver a la tienda</a>
+</div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const resumen = localStorage.getItem("resumenPedido") || "No hay productos";
-  const monto = localStorage.getItem("montoTotal") || "0";
+  document.addEventListener("DOMContentLoaded", () => {
+    const monto = localStorage.getItem("montoTotal") || '0';
+    const resumen = localStorage.getItem("resumenPedido") || '';
 
-  document.getElementById("resumen").textContent = resumen;
-  document.getElementById("monto").textContent = monto;
+    const tbody = document.querySelector("#tabla-pedido tbody");
+    if(resumen) {
+      // Convertir el resumen en líneas y agregarlas a la tabla
+      resumen.split("\n").forEach(line => {
+        if(line.trim() === '') return;
+        // Separar cantidad, nombre y subtotal
+        const match = line.match(/^(\d+) x (.+) - \$([\d.]+)$/);
+        if(match) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${match[2]}</td><td>${match[1]}</td><td>$${match[3]}</td>`;
+          tbody.appendChild(tr);
+        }
+      });
+    } else {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="3">No hay productos</td>`;
+      tbody.appendChild(tr);
+    }
 
-  // Limpiar carrito y datos después de mostrar
-  localStorage.removeItem("cart");
-  localStorage.removeItem("montoTotal");
-  localStorage.removeItem("resumenPedido");
-});
+    document.getElementById("monto").textContent = monto;
+
+    // Limpiar carrito y datos después de mostrar
+    localStorage.removeItem("cart");
+    localStorage.removeItem("montoTotal");
+    localStorage.removeItem("resumenPedido");
+  });
 </script>
+
 </body>
 </html>

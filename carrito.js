@@ -41,7 +41,9 @@ function updateCart() {
   if (totalElem) totalElem.textContent = `Total: $${total}`;
   if (cartCount) cartCount.textContent = totalItems;
 
+  // Guardar carrito y total en localStorage
   localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("montoTotal", total); // 👉 Guardamos el total
 }
 
 // Función para agregar producto
@@ -96,6 +98,10 @@ function enviarPedido() {
 
   // Generar resumen del pedido
   pedidoResumen.value = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");
+
+  // 👉 Guardar monto total en localStorage para la página de gracias
+  const montoTotal = localStorage.getItem("montoTotal") || 0;
+  localStorage.setItem("montoTotal", montoTotal);
 
   // Enviar formulario
   form.submit();

@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Che Castiello - Tienda Online de Yerba Mate</title>
 
-  
 <!-- SEO Meta Tags -->
 <meta name="description" content="Che Castiello - Tienda online especializada en yerba mate de calidad. Descubre nuestras variedades tradicionales, especiales y despaladas." />
 <meta name="keywords" content="yerba mate, tienda online, yerba tradicional, yerba especial, yerba despalada, Che Castiello" />
@@ -71,7 +70,7 @@ nav.navbar {
   overflow: hidden;
   box-shadow: 0 8px 15px rgba(0,0,0,0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: default; /* Cambiado para que no afecte el botón */
+  cursor: default; 
   background: white;
   display: flex;
   flex-direction: column;
@@ -124,7 +123,7 @@ nav.navbar {
   border-radius: 50px;
   padding: 8px 16px;
   user-select: none;
-  cursor: pointer; /* Para que el botón tenga cursor pointer */
+  cursor: pointer;
 }
 .btn-add:hover { background-color: var(--color-principal-oscuro); }
 
@@ -347,15 +346,13 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
     renderCart();
   }
 
-  // Botón finalizar compra
+  // Botón finalizar compra -> redirigir a gracias.html
   document.getElementById('btnFinalizar').addEventListener('click', () => {
     if (cart.length === 0) {
       alert('El carrito está vacío.');
       return;
     }
-    alert('Gracias por su compra! Total: $' + cart.reduce((acc, item) => acc + item.price * item.quantity, 0));
-    cart = [];
-    renderCart();
+    window.location.href = "gracias.html";
   });
 
   // Inicializar contador carrito vacío

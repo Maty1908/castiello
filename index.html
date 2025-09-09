@@ -136,43 +136,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="carrito.js"></script>
-<script>
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function updateCart() {
-    const cartList = document.getElementById("cart-offcanvas");
-    cartList.innerHTML = "";
-    let total = 0;
-    cart.forEach(item => {
-        total += item.price * item.quantity;
-        const li = document.createElement("li");
-        li.textContent = `${item.quantity} x ${item.name} - $${item.price * item.quantity}`;
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "X";
-        removeBtn.onclick = () => {
-            cart = cart.filter(i => i !== item);
-            updateCart();
-        };
-        li.appendChild(removeBtn);
-        cartList.appendChild(li);
-    });
-    document.getElementById("total-offcanvas").textContent = `Total: $${total}`;
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-document.querySelectorAll(".add-to-cart").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-        const name = btn.dataset.name;
-        const price = parseInt(btn.dataset.price);
-        const quantity = 1;
-        const existing = cart.find(i => i.name === name);
-        if (existing) existing.quantity += quantity;
-        else cart.push({name, price, quantity});
-        updateCart();
-        e.stopPropagation();
-    });
-});
-
+// Finalizar compra con Formsubmit - total y detalle correctos
 document.getElementById("btnFinalizar").addEventListener("click", () => {
     const name = localStorage.getItem("userName");
     const email = localStorage.getItem("userEmail");
@@ -183,27 +147,29 @@ document.getElementById("btnFinalizar").addEventListener("click", () => {
         return;
     }
 
+    // Poner datos del usuario en inputs ocultos
     document.getElementById("hiddenName").value = name;
     document.getElementById("hiddenEmail").value = email;
     document.getElementById("hiddenPhone").value = phone;
 
-    const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
-    document.getElementById("pedidoResumen").value = resumen;
+    // Generar resumen del pedido con subtotal de cada producto y total
+    let total = 0;
+    const resumen = cart.map(item => {
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+        return `${item.quantity} x ${item.name} - $${subtotal}`;
+    }).join("\n");
+
+    document.getElementById("pedidoResumen").value = `${resumen}\n\nTotal: $${total}`;
     document.getElementById("pagoMetodo").value = "Transferencia";
 
+    // Enviar formulario
     document.getElementById("order-form").submit();
 
+    // Limpiar carrito
     cart = [];
     updateCart();
 });
-
-document.querySelectorAll('.product-card').forEach(card => {
-    card.addEventListener('click', () => {
-        window.location.href = card.getAttribute('data-url');
-    });
-});
-
-updateCart();
 </script>
 </body>
 </html>

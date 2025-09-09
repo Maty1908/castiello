@@ -44,6 +44,10 @@ function updateCart() {
   // Guardar carrito y total en localStorage
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("montoTotal", total);
+
+  // Guardar resumen del pedido
+  const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
+  localStorage.setItem("resumenPedido", resumen);
 }
 
 // Función para agregar producto
@@ -94,10 +98,12 @@ function enviarPedido() {
   pagoMetodo.value = "Transferencia";
 
   // Guardar resumen del pedido y total
-  pedidoResumen.value = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");
+  const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
+  pedidoResumen.value = `${resumen}\n\nTotal: $${cart.reduce((acc, i) => acc + i.price * i.quantity, 0)}`;
 
-  let totalFinal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  localStorage.setItem("montoTotal", totalFinal);
+  // Guardar en localStorage para la página de gracias
+  localStorage.setItem("montoTotal", cart.reduce((acc, i) => acc + i.price * i.quantity, 0));
+  localStorage.setItem("resumenPedido", resumen);
 
   form.submit();
 

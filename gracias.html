@@ -13,17 +13,15 @@
       font-family: 'Segoe UI', sans-serif;
     }
     .alias-box {
-      background: #fff;
-      border: 1px solid #ddd;
+      background: white;
+      border: 2px solid #dc3545;
       border-radius: 10px;
       padding: 20px;
-      max-width: 400px;
-      margin: 30px auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: inline-block;
+      margin-top: 20px;
     }
     .alias-box h2 {
       color: #dc3545;
-      margin-bottom: 15px;
     }
   </style>
 </head>
@@ -38,12 +36,20 @@
     <p>Por favor, enviá el comprobante al correo o WhatsApp.</p>
   </div>
   
+  <br>
   <a href="index.html" class="btn btn-danger mt-4">Volver a la tienda</a>
     
   <script>
-    // Leer el monto guardado en localStorage y mostrarlo
-    const monto = localStorage.getItem('montoTotal');
-    document.getElementById('monto').textContent = monto ? monto : '0';
+    document.addEventListener("DOMContentLoaded", () => {
+      let monto = localStorage.getItem("montoTotal");
+
+      // Si no encuentra nada en localStorage
+      if (!monto || isNaN(monto)) {
+        monto = "0";
+      }
+
+      document.getElementById("monto").textContent = monto;
+    });
   </script>
 </body>
 </html>

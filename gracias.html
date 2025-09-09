@@ -9,89 +9,90 @@
     body {
       background-color: #f8f9fa;
       font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .gracias-box {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 30px;
-      max-width: 600px;
-      width: 100%;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
       text-align: center;
+      padding: 50px 20px;
     }
-    .gracias-box h1 {
+
+    .container-box {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 30px 20px;
+      max-width: 600px;
+      margin: 40px auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+
+    h1 {
       color: #e1221c;
       margin-bottom: 15px;
     }
-    .gracias-box h2 {
-      color: #dc3545;
-      margin-bottom: 20px;
+
+    .alias-box {
+      background-color: #fdf5f0;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      border: 2px solid #e1221c;
     }
-    .gracias-box p, .gracias-box pre {
+
+    .alias-box h2 {
+      color: #dc3545;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .alias-box p, .alias-box pre {
       font-size: 1rem;
       color: #333;
-      text-align: left;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
-    .alias-box {
-      background-color: #fff6c3;
-      border: 2px solid #e1221c;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    .alias-box h3 {
-      margin-bottom: 10px;
-      color: #e1221c;
-    }
-    .btn-volver {
-      margin-top: 25px;
+
+    .btn-home {
+      margin-top: 30px;
       background-color: #e1221c;
-      color: white;
+      color: #fff;
       border: none;
+      padding: 12px 25px;
       border-radius: 50px;
-      padding: 10px 20px;
       text-decoration: none;
+      font-weight: 600;
       display: inline-block;
-      transition: 0.3s;
     }
-    .btn-volver:hover {
+
+    .btn-home:hover {
       background-color: #9c3a44;
     }
   </style>
 </head>
 <body>
-
-<div class="gracias-box">
   <h1>¡Gracias por tu compra!</h1>
-  <p>Tu pedido fue enviado correctamente. A continuación verás el resumen y el monto total a transferir.</p>
+  <p>Tu pedido fue enviado correctamente y pronto nos pondremos en contacto.</p>
 
-  <div class="alias-box">
-    <h3>Alias de transferencia</h3>
-    <p><strong>Alias:</strong> mate.castiello.mp</p>
-    <p>Por favor envía el comprobante al correo o WhatsApp.</p>
+  <div class="container-box">
+    <div class="alias-box">
+      <h2>Alias para transferencia</h2>
+      <p><strong>Alias:</strong> mate.castiello.mp</p>
+      <p>Por favor realiza la transferencia y envía el comprobante al WhatsApp o correo.</p>
+    </div>
+
+    <div class="alias-box">
+      <h2>Resumen del pedido</h2>
+      <pre id="resumen">Cargando...</pre>
+      <p><strong>Monto total a pagar:</strong> $<span id="monto">0</span></p>
+    </div>
+
+    <a href="index.html" class="btn-home">Volver a la tienda</a>
   </div>
-
-  <div style="margin-top: 20px;">
-    <h2>Resumen del pedido</h2>
-    <pre id="resumen">Cargando...</pre>
-    <p><strong>Monto a pagar:</strong> $<span id="monto">0</span></p>
-  </div>
-
-  <a href="index.html" class="btn-volver">Volver a la tienda</a>
-</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const monto = localStorage.getItem("montoTotal") || '0';
-  const resumen = localStorage.getItem("resumenPedido") || 'No hay productos';
+  const resumen = localStorage.getItem("resumenPedido") || "No hay productos";
+  const monto = localStorage.getItem("montoTotal") || "0";
 
-  document.getElementById("monto").textContent = monto;
   document.getElementById("resumen").textContent = resumen;
+  document.getElementById("monto").textContent = monto;
 
   // Limpiar carrito y datos después de mostrar
   localStorage.removeItem("cart");

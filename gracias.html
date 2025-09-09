@@ -8,88 +8,55 @@
   <style>
     body {
       background-color: #f8f9fa;
-      font-family: 'Montserrat', sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .container-thanks {
-      max-width: 700px;
-      margin: auto;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      padding: 30px;
       text-align: center;
+      padding: 50px;
+      font-family: 'Segoe UI', sans-serif;
     }
-    .container-thanks h1 {
-      color: #e1221c;
-      font-family: 'Alfa Slab One', cursive;
+    .alias-box {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      max-width: 500px;
+      margin: 30px auto;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    .alias-box h2 {
+      color: #dc3545;
       margin-bottom: 20px;
     }
-    .order-summary {
-      text-align: left;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-    .order-summary p {
-      font-size: 1rem;
-      margin: 5px 0;
-    }
-    .total-amount {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #e1221c;
-      margin-top: 15px;
-      margin-bottom: 25px;
-    }
-    .btn-home {
-      background-color: #e1221c;
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      padding: 10px 25px;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-    }
-    .btn-home:hover {
-      background-color: #9c3a44;
-      color: #fff;
+    .alias-box p {
+      font-size: 1.1rem;
     }
   </style>
 </head>
 <body>
-
-<div class="container-thanks">
   <h1>¡Gracias por tu compra!</h1>
-  <p>Tu pedido fue recibido correctamente.</p>
+  <p>Tu pedido fue enviado correctamente.</p>
 
-  <div class="order-summary">
-    <h4>Resumen de tu pedido:</h4>
-    <pre id="resumenPedido" style="background:#f5f5f5;padding:15px;border-radius:8px;"></pre>
-    <div class="total-amount">Total a pagar: $<span id="montoTotal">0</span></div>
+  <div class="alias-box">
+    <h2>Resumen del Pedido</h2>
+    <pre id="resumen" style="text-align:left;"></pre>
+    <p><strong>Total a pagar:</strong> $<span id="monto"></span></p>
+    <h2>Transferencia</h2>
+    <p><strong>Alias:</strong> mate.castiello.mp</p>
+    <p>Por favor, enviá el comprobante al correo o WhatsApp.</p>
   </div>
-
-  <p>Por favor, realizá la transferencia al alias: <strong>mate.castiello.mp</strong></p>
-  <p>Luego envía el comprobante al correo o WhatsApp.</p>
-
-  <a href="index.html" class="btn btn-home mt-3">Volver a la tienda</a>
-</div>
-
+  
+  <a href="index.html" class="btn btn-danger mt-4">Volver a la tienda</a>
+    
 <script>
-  // Mostrar resumen y total desde localStorage
-  const resumen = localStorage.getItem("resumenPedido") || "No hay productos.";
-  const total = localStorage.getItem("montoTotal") || 0;
+document.addEventListener("DOMContentLoaded", () => {
+  const resumen = localStorage.getItem("resumenPedido") || "No hay productos";
+  const total = localStorage.getItem("montoTotal") || "0";
 
-  document.getElementById("resumenPedido").textContent = resumen;
-  document.getElementById("montoTotal").textContent = total;
+  document.getElementById("resumen").textContent = resumen;
+  document.getElementById("monto").textContent = total;
 
-  // Limpiar carrito y total después de mostrar la página
+  // Limpiar carrito después de mostrar datos
   localStorage.removeItem("cart");
-  localStorage.removeItem("montoTotal");
   localStorage.removeItem("resumenPedido");
+  localStorage.removeItem("montoTotal");
+});
 </script>
-
 </body>
 </html>

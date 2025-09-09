@@ -84,4 +84,127 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         <img src="img/roja.png" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Tradicional</h5>
-          <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza
+          <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000" onclick="event.stopPropagation();">Agregar al carrito - $3000</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producto 2 -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="product-card" data-url="yerba.especial.html">
+        <img src="img/dorada.jpg" class="product-img" />
+        <div class="card-body" style="background-color:#fff6c398;">
+          <h5 class="card-title">Yerba Especial</h5>
+          <p class="card-text">Yerba mate con un proceso natural de estacionado que dura entre 18 y 24 meses.</p>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Especial" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Producto 3 -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="product-card" data-url="yerba.despalada.html">
+        <img src="img/verde.jpg" class="product-img" />
+        <div class="card-body" style="background-color:#fff6c398;">
+          <h5 class="card-title">Yerba Despalada</h5>
+          <p class="card-text">Yerba mate con mayor presencia de hojas y aroma intenso, estacionada naturalmente durante 24 meses.</p>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Formulario oculto Formsubmit -->
+<form id="order-form" action="https://formsubmit.co/yerbacastiello@gmail.com" method="POST" style="display:none;">
+  <input type="hidden" name="_next" value="https://maty1908.github.io/castiello/gracias.html" />
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="Nombre y Apellido" id="hiddenName" />
+  <input type="hidden" name="Email" id="hiddenEmail" />
+  <input type="hidden" name="Celular" id="hiddenPhone" />
+  <input type="hidden" name="Pedido" id="pedidoResumen" />
+  <input type="hidden" name="Total" id="pedidoTotal" />
+  <input type="hidden" name="Método de Pago" id="pagoMetodo" />
+</form>
+
+</main>
+
+<footer>
+  <div class="container">&copy; 2025 Che Castiello - Yerba de tradición</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let cart = [];
+
+// Agregar productos al carrito
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const name = button.getAttribute('data-name');
+    const price = Number(button.getAttribute('data-price'));
+    const existing = cart.find(item => item.name === name);
+    if(existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({name, price, quantity:1});
+    }
+    updateCartUI();
+  });
+});
+
+function updateCartUI(){
+  const cartList = document.getElementById('cart-offcanvas');
+  cartList.innerHTML = '';
+  cart.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.textContent = `${item.quantity} x ${item.name} - $${item.price * item.quantity}`;
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = "Eliminar";
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cart.splice(index,1);
+      updateCartUI();
+    });
+    li.appendChild(removeBtn);
+    cartList.appendChild(li);
+  });
+  const total = cart.reduce((acc, item) => acc + item.price*item.quantity,0);
+  document.getElementById('total-offcanvas').textContent = `Total: $${total}`;
+  document.getElementById('cart-count').textContent = cart.reduce((acc, item) => acc + item.quantity,0);
+}
+
+// Finalizar compra
+document.getElementById("btnFinalizar").addEventListener("click", () => {
+  if(cart.length === 0){
+    alert("Tu carrito está vacío.");
+    return;
+  }
+
+  document.getElementById("hiddenName").value = localStorage.getItem("userName") || prompt("Ingrese su nombre y apellido:");
+  document.getElementById("hiddenEmail").value = localStorage.getItem("userEmail") || prompt("Ingrese su email:");
+  document.getElementById("hiddenPhone").value = localStorage.getItem("userPhone") || prompt("Ingrese su celular:");
+
+  let resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
+  document.getElementById("pedidoResumen").value = resumen;
+
+  let total = cart.reduce((acc, item) => acc + item.price * item.quantity,0);
+  document.getElementById("pedidoTotal").value = `$${total}`;
+
+  document.getElementById("pagoMetodo").value = prompt("Ingrese método de pago (ej. Efectivo, Transferencia, Mercado Pago):");
+
+  document.getElementById("order-form").submit();
+});
+
+// Redirección a página de producto
+document.querySelectorAll('.product-card').forEach(card => {
+  card.addEventListener('click', () => {
+    window.location.href = card.getAttribute('data-url');
+  });
+});
+</script>
+</body>
+</html>

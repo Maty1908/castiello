@@ -231,9 +231,28 @@ function enviarPedido() {
   localStorage.setItem("montoTotal", cart.reduce((acc,i)=>acc+i.price*i.quantity,0));
   localStorage.setItem("resumenPedido", resumen);
 
+  function enviarPedido() {
+  if (cart.length === 0) { alert("El carrito está vacío."); return; }
+  if (!checkLoginOrRedirect()) return;
+
+  const form = document.getElementById("order-form");
+  const userData = JSON.parse(localStorage.getItem("userData")) || {};
+  document.getElementById("hiddenName").value = userData.name || "Cliente Anónimo";
+  document.getElementById("hiddenEmail").value = userData.email || "email@dominio.com";
+  document.getElementById("hiddenPhone").value = userData.phone || "0000000000";
+  document.getElementById("pagoMetodo").value = "Transferencia";
+
+  const resumen = cart.map(i => `${i.quantity} x ${i.name} - $${i.price * i.quantity}`).join("\n");
+  document.getElementById("pedidoResumen").value = `${resumen}\n\nTotal: $${cart.reduce((acc,i)=>acc+i.price*i.quantity,0)}`;
+
+  localStorage.setItem("montoTotal", cart.reduce((acc,i)=>acc+i.price*i.quantity,0));
+  localStorage.setItem("resumenPedido", resumen);
+
+  // **Enviar el formulario sin borrar el carrito**
   form.submit();
-  cart = [];
-  updateCart();
+  // cart = []; // <- eliminar esta línea
+  // updateCart(); // <- eliminar esta línea
+}
 }
 
 document.addEventListener("DOMContentLoaded", () => {

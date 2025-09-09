@@ -3,10 +3,10 @@
 // Inicializar carrito desde localStorage o vacío
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Función para revisar login
+// Función para revisar login y redirigir si no está logueado
 function checkLoginOrRedirect() {
-  const loggedIn = localStorage.getItem("loggedIn") === "true"; // Ajustar según tu lógica real
-  if (!loggedIn) {
+  const loggedIn = localStorage.getItem("loggedIn");
+  if (!loggedIn || loggedIn === "false") {
     window.location.href = "inicio.sesion.html";
     return false;
   }
@@ -44,7 +44,7 @@ function updateCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// Función para agregar producto
+// Función para agregar producto al carrito
 function addToCart(name, price, quantity) {
   if (!checkLoginOrRedirect()) return; // Redirige si no está logueado
 
@@ -57,7 +57,7 @@ function addToCart(name, price, quantity) {
   updateCart();
 }
 
-// Función para eliminar producto
+// Función para eliminar producto del carrito
 function removeItem(index) {
   cart.splice(index, 1);
   updateCart();
@@ -81,11 +81,12 @@ function enviarPedido() {
   const pedidoResumen = document.getElementById("pedidoResumen");
   const pagoMetodo = document.getElementById("pagoMetodo");
 
-  // Tomar valores de usuario desde localStorage
+  // Tomar datos de usuario desde localStorage
   hiddenName.value = localStorage.getItem("userName") || "Cliente Anónimo";
   hiddenEmail.value = localStorage.getItem("userEmail") || "email@dominio.com";
   hiddenPhone.value = localStorage.getItem("userPhone") || "0000000000";
-  pagoMetodo.value = "Transferencia"; // método obligatorio
+
+  pagoMetodo.value = "Transferencia"; // obligatorio
 
   // Generar resumen del pedido
   pedidoResumen.value = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");

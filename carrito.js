@@ -1,7 +1,9 @@
 // carrito.js
 
+// Inicializar carrito desde localStorage o vacío
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+// Función para revisar login
 function checkLoginOrRedirect() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   if (!userData) {
@@ -11,6 +13,7 @@ function checkLoginOrRedirect() {
   return true;
 }
 
+// Función para actualizar carrito en pantalla, mini contador y localStorage
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
@@ -38,10 +41,16 @@ function updateCart() {
   if (totalElem) totalElem.textContent = `Total: $${total}`;
   if (cartCount) cartCount.textContent = totalItems;
 
+  // Guardar carrito y total en localStorage
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("montoTotal", total);
+
+  // Guardar resumen del pedido
+  const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
+  localStorage.setItem("resumenPedido", resumen);
 }
 
+// Función para agregar producto
 function addToCart(name, price, quantity) {
   if (!checkLoginOrRedirect()) return;
 
@@ -57,11 +66,13 @@ function addToCart(name, price, quantity) {
   updateCart();
 }
 
+// Función para eliminar producto
 function removeItem(index) {
   cart.splice(index, 1);
   updateCart();
 }
 
+// Función para enviar pedido
 function enviarPedido() {
   if (cart.length === 0) {
     alert("El carrito está vacío.");
@@ -86,24 +97,22 @@ function enviarPedido() {
 
   pagoMetodo.value = "Transferencia";
 
-  let totalFinal = 0;
-  const resumen = cart.map(item => {
-    const subtotal = item.price * item.quantity;
-    totalFinal += subtotal;
-    return `${item.quantity} x ${item.name} - $${subtotal}`;
-  }).join("\n");
+  // Guardar resumen del pedido y total
+  const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
+  pedidoResumen.value = `${resumen}\n\nTotal: $${cart.reduce((acc, i) => acc + i.price * i.quantity, 0)}`;
 
-  localStorage.setItem("montoTotal", totalFinal);
+  // Guardar en localStorage para la página de gracias
+  localStorage.setItem("montoTotal", cart.reduce((acc, i) => acc + i.price * i.quantity, 0));
   localStorage.setItem("resumenPedido", resumen);
-
-  pedidoResumen.value = `${resumen}\n\nTotal: $${totalFinal}`;
 
   form.submit();
 
+  // Limpiar carrito después de enviar
   cart = [];
   updateCart();
 }
 
+// Inicializar eventos al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
 

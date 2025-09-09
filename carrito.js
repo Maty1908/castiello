@@ -3,32 +3,51 @@
 // Inicializar carrito desde localStorage o vacío
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Función para actualizar carrito en pantalla y en localStorage
+// Función para revisar login
+function checkLoginOrRedirect() {
+  const loggedIn = localStorage.getItem("loggedIn") === "true"; // Cambia según tu lógica real
+  if (!loggedIn) {
+    window.location.href = "inicio.sesion.html";
+    return false;
+  }
+  return true;
+}
+
+// Función para actualizar carrito en pantalla, mini contador y localStorage
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
-  cartList.innerHTML = "";
+  const cartCount = document.getElementById("cart-count");
 
+  if (cartList) cartList.innerHTML = "";
   let total = 0;
+  let totalItems = 0;
 
   cart.forEach((item, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${item.name} x ${item.quantity} - $${item.price * item.quantity}
-      <div>
-        <button onclick="removeItem(${index})">Eliminar</button>
-      </div>
-    `;
-    cartList.appendChild(li);
+    if (cartList) {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${item.name} x ${item.quantity} - $${item.price * item.quantity}
+        <div>
+          <button onclick="removeItem(${index})">Eliminar</button>
+        </div>
+      `;
+      cartList.appendChild(li);
+    }
     total += item.price * item.quantity;
+    totalItems += item.quantity;
   });
 
-  totalElem.textContent = `Total: $${total}`;
+  if (totalElem) totalElem.textContent = `Total: $${total}`;
+  if (cartCount) cartCount.textContent = totalItems;
+
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 // Función para agregar producto
 function addToCart(name, price, quantity) {
+  if (!checkLoginOrRedirect()) return; // Redirige si no está logueado
+
   let existingItem = cart.find(item => item.name === name);
   if (existingItem) {
     existingItem.quantity += quantity;
@@ -51,21 +70,22 @@ function enviarPedido() {
     return;
   }
 
+  if (!checkLoginOrRedirect()) return; // Redirige si no está logueado
+
   const form = document.getElementById("order-form");
   if (!form) return;
 
-  // Ejemplo: rellenar campos del formulario (modifica según tus inputs)
   const hiddenName = document.getElementById("hiddenName");
   const hiddenEmail = document.getElementById("hiddenEmail");
   const hiddenPhone = document.getElementById("hiddenPhone");
   const pedidoResumen = document.getElementById("pedidoResumen");
   const pagoMetodo = document.getElementById("pagoMetodo");
 
-  // Aquí puedes tomar valores de un formulario real si quieres
-  hiddenName.value = prompt("Nombre y Apellido") || "Cliente Anónimo";
-  hiddenEmail.value = prompt("Email") || "email@dominio.com";
-  hiddenPhone.value = prompt("Celular") || "0000000000";
-  pagoMetodo.value = prompt("Método de pago") || "No especificado";
+  // Tomar valores de inputs visibles o usar datos de usuario si existen
+  hiddenName.value = localStorage.getItem("userName") || "Cliente Anónimo";
+  hiddenEmail.value = localStorage.getItem("userEmail") || "email@dominio.com";
+  hiddenPhone.value = localStorage.getItem("userPhone") || "0000000000";
+  pagoMetodo.value = "Transferencia"; // método obligatorio
 
   // Generar resumen del pedido
   pedidoResumen.value = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");

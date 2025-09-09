@@ -12,9 +12,17 @@
       padding: 50px;
       font-family: 'Segoe UI', sans-serif;
     }
-    .alias-box {-
+    .alias-box {
+      background: white;
+      border: 2px solid #dc3545;
+      border-radius: 12px;
+      padding: 20px;
+      display: inline-block;
+      margin-top: 20px;
+    }
     .alias-box h2 {
       color: #dc3545;
+      margin-bottom: 15px;
     }
   </style>
 </head>
@@ -35,7 +43,7 @@
 <script>
   // Leer el monto guardado y mostrarlo
   const monto = localStorage.getItem('montoTotal');
-  document.getElementById('monto').textContent = monto || '...';
+  document.getElementById('monto').textContent = monto ? monto : '0';
 </script>
 </body>
 </html>

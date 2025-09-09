@@ -5,7 +5,7 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 // Función para revisar login
 function checkLoginOrRedirect() {
-  const loggedIn = localStorage.getItem("loggedIn") === "true"; // Cambia según tu lógica real
+  const loggedIn = localStorage.getItem("loggedIn") === "true"; // Ajustar según tu lógica real
   if (!loggedIn) {
     window.location.href = "inicio.sesion.html";
     return false;
@@ -81,7 +81,7 @@ function enviarPedido() {
   const pedidoResumen = document.getElementById("pedidoResumen");
   const pagoMetodo = document.getElementById("pagoMetodo");
 
-  // Tomar valores de inputs visibles o usar datos de usuario si existen
+  // Tomar valores de usuario desde localStorage
   hiddenName.value = localStorage.getItem("userName") || "Cliente Anónimo";
   hiddenEmail.value = localStorage.getItem("userEmail") || "email@dominio.com";
   hiddenPhone.value = localStorage.getItem("userPhone") || "0000000000";

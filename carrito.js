@@ -13,30 +13,32 @@ function checkLoginOrRedirect() {
   return true;
 }
 
-// Función para actualizar el carrito en la página
+// Función para actualizar carrito en offcanvas y contador
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
-  const totalElem = document.getElementById("cart-total");
+  const totalElem = document.getElementById("total-offcanvas");
+  const cartCount = document.getElementById("cart-count");
 
-  if (!cartList || !totalElem) return;
+  if (!cartList || !totalElem || !cartCount) return;
 
-  // Limpiar carrito actual
   cartList.innerHTML = "";
 
   if (cart.length === 0) {
-    cartList.innerHTML = "<p>Tu carrito está vacío</p>";
-    totalElem.textContent = "$0";
+    cartList.innerHTML = "<li>Tu carrito está vacío</li>";
+    totalElem.textContent = "Total: $0";
+    cartCount.textContent = "0";
     return;
   }
 
-  // Agregar productos al carrito y calcular total
   let total = 0;
+  let totalQuantity = 0;
+
   cart.forEach((item, index) => {
     const itemTotal = item.price * item.quantity;
     total += itemTotal;
+    totalQuantity += item.quantity;
 
     const li = document.createElement("li");
-    li.className = "cart-item";
     li.innerHTML = `
       <span>${item.name} x ${item.quantity}</span>
       <span>$${itemTotal.toFixed(2)}</span>
@@ -45,10 +47,11 @@ function updateCart() {
     cartList.appendChild(li);
   });
 
-  totalElem.textContent = `$${total.toFixed(2)}`;
+  totalElem.textContent = `Total: $${total.toFixed(2)}`;
+  cartCount.textContent = totalQuantity;
 }
 
-// Función para agregar un producto al carrito
+// Función para agregar producto al carrito
 function addToCart(product) {
   const existing = cart.find(item => item.id === product.id);
   if (existing) {
@@ -75,8 +78,30 @@ function clearCart() {
   updateCart();
 }
 
-// Inicializar carrito al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
+// Inicializar botones "Agregar al carrito" del index.html
+function initAddToCartButtons() {
+  const buttons = document.querySelectorAll('.add-to-cart');
+
+  buttons.forEach((btn, index) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // evita redirección del card
+      const name = btn.getAttribute('data-name');
+      const price = parseFloat(btn.getAttribute('data-price'));
+      const id = index + 1; // id único para cada producto del index
+
+      addToCart({ id, name, price });
+
+      // Abrir offcanvas automáticamente
+      const offcanvasEl = document.getElementById('offcanvasCarrito');
+      const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
+      bsOffcanvas.show();
+    });
+  });
+}
+
+// Inicializar al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
   checkLoginOrRedirect();
   updateCart();
+  initAddToCartButtons();
 });

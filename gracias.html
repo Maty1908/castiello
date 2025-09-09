@@ -31,12 +31,6 @@
     .btn-back {
       margin-top: 30px;
     }
-    pre {
-      font-size: 1rem;
-      background: #f8f9fa;
-      padding: 10px;
-      border-radius: 8px;
-    }
   </style>
 </head>
 <body>
@@ -46,8 +40,6 @@
   <div class="alias-box">
     <h2>Transferencia</h2>
     <p><strong>Alias:</strong> mate.castiello.mp</p>
-    <p><strong>Resumen del pedido:</strong></p>
-    <pre id="resumen"></pre>
     <p><strong>Monto total a pagar:</strong> $<span id="monto"></span></p>
     <p>Por favor, enviá el comprobante al correo o WhatsApp.</p>
   </div>
@@ -55,12 +47,13 @@
   <a href="index.html" class="btn btn-danger btn-back">Volver a la tienda</a>
 
   <script>
-    const montoTotal = localStorage.getItem('montoTotal') || 0;
-    const resumenPedido = localStorage.getItem('resumenPedido') || 'No hay items en el pedido.';
+    // Traigo el monto guardado en localStorage
+    const montoTotal = localStorage.getItem('montoTotal');
 
-    document.getElementById('monto').textContent = montoTotal;
-    document.getElementById('resumen').textContent = resumenPedido;
+    // Si existe, lo muestro, si no muestro 0
+    document.getElementById('monto').textContent = montoTotal ? montoTotal : '0';
 
+    // Limpio solo al final, así no se pisa antes de mostrar
     localStorage.removeItem('cart');
     localStorage.removeItem('montoTotal');
     localStorage.removeItem('resumenPedido');

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -36,26 +36,22 @@
   <div class="alias-box">
     <h2>Resumen del Pedido</h2>
     <pre id="resumen" style="text-align:left;"></pre>
-    <p><strong>Total a pagar:</strong> $<span id="monto"></span></p>
-    <h2>Transferencia</h2>
-    <p><strong>Alias:</strong> mate.castiello.mp</p>
-    <p>Por favor, enviá el comprobante al correo o WhatsApp.</p>
-  </div>
-  
-  <a href="index.html" class="btn btn-danger mt-4">Volver a la tienda</a>
-    
+<p><strong>Monto a pagar:</strong> $<span id="monto">...</span></p>
+<p><strong>Resumen:</strong></p>
+<pre id="resumen"></pre>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const resumen = localStorage.getItem("resumenPedido") || "No hay productos";
-  const total = localStorage.getItem("montoTotal") || "0";
+  const monto = localStorage.getItem("montoTotal") || '0';
+  const resumen = localStorage.getItem("resumenPedido") || 'No hay productos';
 
+  document.getElementById("monto").textContent = monto;
   document.getElementById("resumen").textContent = resumen;
-  document.getElementById("monto").textContent = total;
 
-  // Limpiar carrito después de mostrar datos
+  // Limpiar carrito y datos después de mostrar
   localStorage.removeItem("cart");
-  localStorage.removeItem("resumenPedido");
   localStorage.removeItem("montoTotal");
+  localStorage.removeItem("resumenPedido");
 });
 </script>
 </body>

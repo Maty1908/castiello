@@ -182,26 +182,28 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 <main class="container mb-5 mt-5">
 <section id="productos" class="mb-5">
   <!-- Producto 1 -->
-<div class="row g-4">
-  <div class="col-md-4 col-sm-6 col-12">
-    <a href="yerba.tradicional.html" class="product-link" style="text-decoration: none; color: inherit;">
-      <div class="product-card">
-        <img src="img/roja.png" class="product-img" />
-        <div class="card-body" style="background-color:#fff6c398;">
-          <h5 class="card-title">Yerba Tradicional</h5>
-          <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
-          <button class="btn btn-add add-to-cart" 
-                  data-name="Yerba Tradicional" 
-                  data-price="3000"
-                  onclick="event.stopPropagation();">
-            Agregar al carrito - $3000
-          </button>
-        </div>
-      </div>
-    </a>
-  </div>
-</div>
+<section id="productos" class="mb-5">
+  <!-- Inicio de la fila para todos los productos -->
+  <div class="row g-4">
 
+    <!-- Producto 1 -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <a href="yerba.tradicional.html" class="product-link" style="text-decoration: none; color: inherit;">
+        <div class="product-card">
+          <img src="img/roja.png" class="product-img" />
+          <div class="card-body" style="background-color:#fff6c398;">
+            <h5 class="card-title">Yerba Tradicional</h5>
+            <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
+            <button class="btn btn-add add-to-cart" 
+                    data-name="Yerba Tradicional" 
+                    data-price="3000"
+                    onclick="event.stopPropagation();">
+              Agregar al carrito - $3000
+            </button>
+          </div>
+        </div>
+      </a>
+    </div>
 
     <!-- Producto 2 -->
     <div class="col-md-4 col-sm-6 col-12">
@@ -214,6 +216,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         </div>
       </div>
     </div>
+
     <!-- Producto 3 -->
     <div class="col-md-4 col-sm-6 col-12">
       <div class="product-card">
@@ -225,6 +228,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         </div>
       </div>
     </div>
+
   </div>
 </section>
 

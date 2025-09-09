@@ -14,6 +14,8 @@ h1,h2,h5,.navbar-brand { font-family: 'Alfa Slab One', cursive !important; }
 nav.navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: var(--color-principal) !important; }
 .navbar-brand { font-size: 1.6rem; color: #fff !important; letter-spacing: 2px; user-select: none; }
 #cart-count { font-size: 0.7rem; padding: 0.25em 0.5em; background-color: #fff; color: var(--color-principal); border-radius: 50%; margin-left:5px; display:inline-block; text-align:center; }
+
+/* PRODUCTOS */
 .product-card { border-radius: 15px; overflow: hidden; box-shadow: 0 8px 15px rgba(0,0,0,0.12); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; background: white; display: flex; flex-direction: column; height: 100%; border: 3px solid var(--color-secundario); }
 .product-card:hover { transform: scale(1.03); box-shadow: 0 15px 25px var(--color-principal); border-color: var(--color-principal); z-index: 10; }
 .product-img { width: 100%; aspect-ratio: 4/3; border-bottom: 5px solid var(--color-principal); object-fit: cover; }
@@ -22,17 +24,32 @@ nav.navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: var(--colo
 .card-text { flex-grow: 1; color: #7f574c; font-size: 0.95rem; margin-bottom: 1rem; user-select: none; }
 .btn-add { background-color: var(--color-principal); border: none; font-weight: 600; font-size: 1rem; transition: background-color 0.3s ease; color: white; border-radius: 50px; padding: 8px 16px; user-select: none; }
 .btn-add:hover { background-color: var(--color-principal-oscuro); }
-#cart-offcanvas li { font-weight: 600; font-size: 1rem; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; background-color: #fff6c398; display: flex; justify-content: space-between; align-items: center; color: var(--color-principal); border: 2px solid var(--color-principal); flex-wrap: wrap; }
-#cart-offcanvas li button { background-color: var(--color-principal); color:white; border:none; padding:3px 8px; border-radius:5px; margin:2px; cursor:pointer; }
-#cart-offcanvas li button:hover { background-color: var(--color-principal-oscuro); }
+
+/* CARRITO */
+#cart-offcanvas li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background-color: #fff6c398;
+  border: 2px solid var(--color-principal);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.cart-item-name { flex: 1; font-weight: 600; color: var(--color-principal); }
 .cart-item-controls { display: flex; align-items: center; gap: 5px; }
-.cart-item-name { flex: 1; text-align: left; }
-.cart-item-price { font-weight: 700; }
+.cart-item-controls button { background-color: var(--color-principal); color: white; border: none; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-weight: 600; }
+.cart-item-controls button:hover { background-color: var(--color-principal-oscuro); }
+.cart-item-price { font-weight: 700; color: var(--color-principal); min-width: 50px; text-align: right; }
 #total-offcanvas { font-size: 1.3rem; color: var(--color-principal); font-weight: 700; text-align: center; margin-top: 10px; user-select: none; }
 footer { background-color: var(--color-principal); color: var(--color-secundario); padding: 15px 0; text-align: center; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em; user-select: none; margin-top: auto; box-shadow: 0 -3px 8px rgba(203,73,85,0.5); }
 #offcanvasCarrito { width: 100%; max-width: 500px; }
 .btn-finalizar { background-color: var(--color-principal); color:white; border:none; border-radius:50px; padding:10px 18px; }
 .btn-finalizar:hover { background-color:var(--color-principal-oscuro); }
+
+/* MEDIA QUERIES */
 @media (max-width: 992px) { .product-card { height: auto; } .card-title { font-size: 1.1rem; } .card-text { font-size: 0.9rem; } }
 @media (max-width: 768px) { .navbar-brand { font-size: 1.3rem; flex-direction: column; text-align: center; } .navbar-brand img { margin-bottom: 5px; } #cart-count { font-size: 0.65rem; } .btn-add { font-size: 0.95rem; padding: 6px 12px; } #total-offcanvas { font-size: 1.1rem; } }
 @media (max-width: 576px) { .navbar-brand { margin: 0 auto; display: flex; flex-direction: column; align-items: center; } .navbar-brand img { margin-bottom: 5px; } .navbar-toggler { position: absolute; right: 10px; top: 10px; } }
@@ -83,36 +100,36 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 
     <!-- Producto 1 -->
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card" data-url="yerba.tradicional.html">
+      <div class="product-card">
         <img src="img/roja.png" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Tradicional</h5>
           <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000" onclick="event.stopPropagation();">Agregar al carrito - $3000</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000">Agregar al carrito - $3000</button>
         </div>
       </div>
     </div>
 
     <!-- Producto 2 -->
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card" data-url="yerba.dorada.html">
+      <div class="product-card">
         <img src="img/dorada.jpg" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Especial</h5>
           <p class="card-text">Yerba mate con un proceso natural de estacionado que dura entre 18 y 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Especial" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Especial" data-price="3500">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
 
     <!-- Producto 3 -->
     <div class="col-md-4 col-sm-6 col-12">
-      <div class="product-card" data-url="yerba.despalada.html">
+      <div class="product-card">
         <img src="img/verde.jpg" class="product-img" />
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Despalada</h5>
           <p class="card-text">Yerba mate con mayor presencia de hojas y aroma intenso, estacionada naturalmente durante 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
@@ -138,12 +155,94 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="carrito.js"></script>
 <script>
-document.querySelectorAll('.product-card').forEach(card => {
-  card.addEventListener('click', () => {
-    window.location.href = card.getAttribute('data-url');
+// Carrito funcional con + y - y subtotal
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function checkLoginOrRedirect() {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  if (!userData) {
+    window.location.href = "inicio.sesion.html";
+    return false;
+  }
+  return true;
+}
+
+function updateCart() {
+  const cartList = document.getElementById("cart-offcanvas");
+  const totalElem = document.getElementById("total-offcanvas");
+  const cartCount = document.getElementById("cart-count");
+
+  if (cartList) cartList.innerHTML = "";
+  let total = 0;
+  let totalItems = 0;
+
+  cart.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span class="cart-item-name">${item.name}</span>
+      <div class="cart-item-controls">
+        <button onclick="decreaseQty(${index})">-</button>
+        <span>${item.quantity}</span>
+        <button onclick="increaseQty(${index})">+</button>
+      </div>
+      <span class="cart-item-price">$${item.price * item.quantity}</span>
+    `;
+    cartList.appendChild(li);
+
+    total += item.price * item.quantity;
+    totalItems += item.quantity;
   });
+
+  if (totalElem) totalElem.textContent = `Total: $${total}`;
+  if (cartCount) cartCount.textContent = totalItems;
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("montoTotal", total);
+  const resumen = cart.map(i => `${i.quantity} x ${i.name} - $${i.price * i.quantity}`).join("\n");
+  localStorage.setItem("resumenPedido", resumen);
+}
+
+function increaseQty(index) { cart[index].quantity++; updateCart(); }
+function decreaseQty(index) { if(cart[index].quantity>1){cart[index].quantity--;}else{cart.splice(index,1);} updateCart(); }
+
+function addToCart(name, price, quantity = 1) {
+  if (!checkLoginOrRedirect()) return;
+  let existingItem = cart.find(i => i.name === name);
+  if (existingItem) existingItem.quantity += quantity;
+  else cart.push({name, price, quantity});
+  updateCart();
+}
+
+function enviarPedido() {
+  if (cart.length === 0) { alert("El carrito está vacío."); return; }
+  if (!checkLoginOrRedirect()) return;
+
+  const form = document.getElementById("order-form");
+  const userData = JSON.parse(localStorage.getItem("userData")) || {};
+  document.getElementById("hiddenName").value = userData.name || "Cliente Anónimo";
+  document.getElementById("hiddenEmail").value = userData.email || "email@dominio.com";
+  document.getElementById("hiddenPhone").value = userData.phone || "0000000000";
+  document.getElementById("pagoMetodo").value = "Transferencia";
+
+  const resumen = cart.map(i => `${i.quantity} x ${i.name} - $${i.price * i.quantity}`).join("\n");
+  document.getElementById("pedidoResumen").value = `${resumen}\n\nTotal: $${cart.reduce((acc,i)=>acc+i.price*i.quantity,0)}`;
+
+  localStorage.setItem("montoTotal", cart.reduce((acc,i)=>acc+i.price*i.quantity,0));
+  localStorage.setItem("resumenPedido", resumen);
+
+  form.submit();
+  cart = [];
+  updateCart();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateCart();
+  document.querySelectorAll(".add-to-cart").forEach(btn => {
+    btn.addEventListener("click", e => { e.stopPropagation(); addToCart(btn.dataset.name, Number(btn.dataset.price)); });
+  });
+  const btnFinalizar = document.getElementById("btnFinalizar");
+  if(btnFinalizar) btnFinalizar.addEventListener("click", enviarPedido);
 });
 </script>
 </body>

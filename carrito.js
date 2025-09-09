@@ -43,14 +43,13 @@ function updateCart() {
 
   // Guardar carrito y total en localStorage
   localStorage.setItem("cart", JSON.stringify(cart));
-  localStorage.setItem("montoTotal", total); // 👉 Guardamos el total
+  localStorage.setItem("montoTotal", total);
 }
 
 // Función para agregar producto
 function addToCart(name, price, quantity) {
   if (!checkLoginOrRedirect()) return;
 
-  // Unificar productos con nombres iguales (sin diferenciar Castiello, espacios extra, etc.)
   const cleanName = name.replace(/ *Castiello */gi, "").trim();
   let existingItem = cart.find(item => item.name === cleanName);
 
@@ -69,7 +68,7 @@ function removeItem(index) {
   updateCart();
 }
 
-// Función para enviar pedido por FormSubmit
+// Función para enviar pedido
 function enviarPedido() {
   if (cart.length === 0) {
     alert("El carrito está vacío.");
@@ -87,23 +86,19 @@ function enviarPedido() {
   const pedidoResumen = document.getElementById("pedidoResumen");
   const pagoMetodo = document.getElementById("pagoMetodo");
 
-  // Tomar valores de usuario desde localStorage
   const userData = JSON.parse(localStorage.getItem("userData"));
   hiddenName.value = userData?.name || "Cliente Anónimo";
   hiddenEmail.value = userData?.email || "email@dominio.com";
   hiddenPhone.value = userData?.phone || "0000000000";
 
-  // Método de pago obligatorio
   pagoMetodo.value = "Transferencia";
 
-  // Generar resumen del pedido
+  // Guardar resumen del pedido y total
   pedidoResumen.value = cart.map(item => `${item.name} x ${item.quantity}`).join(", ");
 
-  // 👉 Guardar monto total en localStorage para la página de gracias
-  const montoTotal = localStorage.getItem("montoTotal") || 0;
-  localStorage.setItem("montoTotal", montoTotal);
+  let totalFinal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  localStorage.setItem("montoTotal", totalFinal);
 
-  // Enviar formulario
   form.submit();
 
   // Limpiar carrito después de enviar
@@ -115,17 +110,15 @@ function enviarPedido() {
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
 
-  // Botones de agregar al carrito
   document.querySelectorAll(".add-to-cart").forEach(button => {
     button.addEventListener("click", (e) => {
-      e.stopPropagation(); // evitar que card haga redirect
+      e.stopPropagation();
       const name = button.getAttribute("data-name");
       const price = Number(button.getAttribute("data-price"));
       addToCart(name, price, 1);
     });
   });
 
-  // Botón finalizar compra
   const btnFinalizar = document.getElementById("btnFinalizar");
   if (btnFinalizar) {
     btnFinalizar.addEventListener("click", enviarPedido);

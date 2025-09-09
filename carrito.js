@@ -3,7 +3,7 @@
 // Inicializar carrito desde localStorage o vacío
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Función para revisar login
+// Revisar login
 function checkLoginOrRedirect() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   if (!userData) {
@@ -13,7 +13,7 @@ function checkLoginOrRedirect() {
   return true;
 }
 
-// Función para actualizar carrito en pantalla, mini contador y localStorage
+// Actualizar carrito en pantalla, contador y localStorage
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
@@ -28,16 +28,14 @@ function updateCart() {
       const li = document.createElement("li");
       li.classList.add("d-flex", "justify-content-between", "align-items-center");
       li.innerHTML = `
-        <div class="d-flex align-items-center gap-2">
-          <button class="btn btn-sm btn-danger" onclick="decreaseQty(${index})">-</button>
+        <div class="d-flex align-items-center">
+          <strong>${item.name}</strong> &nbsp;
+          <button onclick="decreaseQty(${index})" class="btn btn-sm btn-secondary me-1">-</button>
           <span>${item.quantity}</span>
-          <button class="btn btn-sm btn-success" onclick="increaseQty(${index})">+</button>
-          <span style="margin-left:10px;">${item.name}</span>
+          <button onclick="increaseQty(${index})" class="btn btn-sm btn-secondary ms-1">+</button>
         </div>
-        <div>
-          <span>$${item.price * item.quantity}</span>
-          <button class="btn btn-sm btn-outline-danger ms-2" onclick="removeItem(${index})">Eliminar</button>
-        </div>
+        <span>$${item.price * item.quantity}</span>
+        <button onclick="removeItem(${index})" class="btn btn-sm btn-danger ms-2">Eliminar</button>
       `;
       cartList.appendChild(li);
     }
@@ -48,16 +46,15 @@ function updateCart() {
   if (totalElem) totalElem.textContent = `Total: $${total}`;
   if (cartCount) cartCount.textContent = totalItems;
 
-  // Guardar carrito y total en localStorage
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("montoTotal", total);
 
-  // Guardar resumen del pedido para la página de gracias
+  // Guardar resumen detallado en localStorage
   const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
   localStorage.setItem("resumenPedido", resumen);
 }
 
-// Funciones para aumentar o disminuir cantidad
+// Funciones para cambiar cantidad
 function increaseQty(index) {
   cart[index].quantity += 1;
   updateCart();
@@ -72,35 +69,31 @@ function decreaseQty(index) {
   updateCart();
 }
 
-// Función para agregar producto
+// Agregar producto
 function addToCart(name, price, quantity) {
   if (!checkLoginOrRedirect()) return;
-
   const cleanName = name.replace(/ *Castiello */gi, "").trim();
   let existingItem = cart.find(item => item.name === cleanName);
-
   if (existingItem) {
     existingItem.quantity += quantity;
   } else {
     cart.push({ name: cleanName, price, quantity });
   }
-
   updateCart();
 }
 
-// Función para eliminar producto
+// Eliminar producto
 function removeItem(index) {
   cart.splice(index, 1);
   updateCart();
 }
 
-// Función para enviar pedido
+// Enviar pedido
 function enviarPedido() {
   if (cart.length === 0) {
     alert("El carrito está vacío.");
     return;
   }
-
   if (!checkLoginOrRedirect()) return;
 
   const form = document.getElementById("order-form");
@@ -119,21 +112,22 @@ function enviarPedido() {
 
   pagoMetodo.value = "Transferencia";
 
-  // Guardar resumen del pedido y total
-  const total = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
   const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
+  const total = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
 
   pedidoResumen.value = `${resumen}\n\nTotal: $${total}`;
 
   // Guardar en localStorage para la página de gracias
-  localStorage.setItem("montoTotal", total);
   localStorage.setItem("resumenPedido", resumen);
+  localStorage.setItem("montoTotal", total);
 
+  // Enviar formulario
   form.submit();
-  // NO limpiar carrito aquí, se limpiará en la página de gracias
+
+  // NO limpiar carrito acá: se limpiará en la página de gracias
 }
 
-// Inicializar eventos al cargar la página
+// Inicializar eventos
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
 

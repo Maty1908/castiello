@@ -3,7 +3,7 @@
 // Inicializar carrito desde localStorage o vacío
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Revisar login
+// Función para revisar login
 function checkLoginOrRedirect() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   if (!userData) {
@@ -13,7 +13,7 @@ function checkLoginOrRedirect() {
   return true;
 }
 
-// Actualizar carrito en pantalla, contador y localStorage
+// Función para actualizar carrito en pantalla, mini contador y localStorage
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
@@ -26,16 +26,17 @@ function updateCart() {
   cart.forEach((item, index) => {
     if (cartList) {
       const li = document.createElement("li");
-      li.classList.add("d-flex", "justify-content-between", "align-items-center");
       li.innerHTML = `
-        <div class="d-flex align-items-center">
-          <strong>${item.name}</strong> &nbsp;
-          <button onclick="decreaseQty(${index})" class="btn btn-sm btn-secondary me-1">-</button>
-          <span>${item.quantity}</span>
-          <button onclick="increaseQty(${index})" class="btn btn-sm btn-secondary ms-1">+</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+          <span>${item.name}</span>
+          <div>
+            <button onclick="decreaseQuantity(${index})">-</button>
+            <span style="margin:0 8px;">${item.quantity}</span>
+            <button onclick="increaseQuantity(${index})">+</button>
+          </div>
+          <span>$${item.price * item.quantity}</span>
         </div>
-        <span>$${item.price * item.quantity}</span>
-        <button onclick="removeItem(${index})" class="btn btn-sm btn-danger ms-2">Eliminar</button>
+        <div style="margin-top:5px;"><button onclick="removeItem(${index})">Eliminar</button></div>
       `;
       cartList.appendChild(li);
     }
@@ -49,18 +50,32 @@ function updateCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("montoTotal", total);
 
-  // Guardar resumen detallado en localStorage
   const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
   localStorage.setItem("resumenPedido", resumen);
 }
 
-// Funciones para cambiar cantidad
-function increaseQty(index) {
-  cart[index].quantity += 1;
+// Función para agregar producto
+function addToCart(name, price, quantity) {
+  if (!checkLoginOrRedirect()) return;
+
+  const cleanName = name.replace(/ *Castiello */gi, "").trim();
+  let existingItem = cart.find(item => item.name === cleanName);
+
+  if (existingItem) {
+    existingItem.quantity += quantity;
+  } else {
+    cart.push({ name: cleanName, price, quantity });
+  }
+
   updateCart();
 }
 
-function decreaseQty(index) {
+// Funciones para aumentar/disminuir cantidad
+function increaseQuantity(index) {
+  cart[index].quantity += 1;
+  updateCart();
+}
+function decreaseQuantity(index) {
   if (cart[index].quantity > 1) {
     cart[index].quantity -= 1;
   } else {
@@ -69,31 +84,19 @@ function decreaseQty(index) {
   updateCart();
 }
 
-// Agregar producto
-function addToCart(name, price, quantity) {
-  if (!checkLoginOrRedirect()) return;
-  const cleanName = name.replace(/ *Castiello */gi, "").trim();
-  let existingItem = cart.find(item => item.name === cleanName);
-  if (existingItem) {
-    existingItem.quantity += quantity;
-  } else {
-    cart.push({ name: cleanName, price, quantity });
-  }
-  updateCart();
-}
-
-// Eliminar producto
+// Función para eliminar producto
 function removeItem(index) {
   cart.splice(index, 1);
   updateCart();
 }
 
-// Enviar pedido
+// Función para enviar pedido
 function enviarPedido() {
   if (cart.length === 0) {
     alert("El carrito está vacío.");
     return;
   }
+
   if (!checkLoginOrRedirect()) return;
 
   const form = document.getElementById("order-form");
@@ -114,20 +117,18 @@ function enviarPedido() {
 
   const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
   const total = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
-
   pedidoResumen.value = `${resumen}\n\nTotal: $${total}`;
 
-  // Guardar en localStorage para la página de gracias
-  localStorage.setItem("resumenPedido", resumen);
   localStorage.setItem("montoTotal", total);
+  localStorage.setItem("resumenPedido", resumen);
 
   // Enviar formulario
   form.submit();
 
-  // NO limpiar carrito acá: se limpiará en la página de gracias
+  // NO limpiar el carrito aquí, se limpiará en la página de gracias
 }
 
-// Inicializar eventos
+// Inicializar eventos al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
 

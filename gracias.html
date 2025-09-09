@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -8,37 +8,82 @@
   <style>
     body {
       background-color: #f8f9fa;
-      text-align: center;
-      padding: 50px;
       font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
     }
-    .alias-box {
+    .gracias-box {
       background-color: #fff;
-      border-radius: 10px;
-      padding: 25px;
-      max-width: 500px;
-      margin: 30px auto;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      text-align: center;
     }
-    .alias-box h2 {
+    .gracias-box h1 {
+      color: #e1221c;
+      margin-bottom: 15px;
+    }
+    .gracias-box h2 {
       color: #dc3545;
       margin-bottom: 20px;
     }
-    .alias-box p {
-      font-size: 1.1rem;
+    .gracias-box p, .gracias-box pre {
+      font-size: 1rem;
+      color: #333;
+      text-align: left;
+    }
+    .alias-box {
+      background-color: #fff6c3;
+      border: 2px solid #e1221c;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .alias-box h3 {
+      margin-bottom: 10px;
+      color: #e1221c;
+    }
+    .btn-volver {
+      margin-top: 25px;
+      background-color: #e1221c;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      text-decoration: none;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .btn-volver:hover {
+      background-color: #9c3a44;
     }
   </style>
 </head>
 <body>
+
+<div class="gracias-box">
   <h1>¡Gracias por tu compra!</h1>
-  <p>Tu pedido fue enviado correctamente.</p>
+  <p>Tu pedido fue enviado correctamente. A continuación verás el resumen y el monto total a transferir.</p>
 
   <div class="alias-box">
-    <h2>Resumen del Pedido</h2>
-    <pre id="resumen" style="text-align:left;"></pre>
-<p><strong>Monto a pagar:</strong> $<span id="monto">...</span></p>
-<p><strong>Resumen:</strong></p>
-<pre id="resumen"></pre>
+    <h3>Alias de transferencia</h3>
+    <p><strong>Alias:</strong> mate.castiello.mp</p>
+    <p>Por favor envía el comprobante al correo o WhatsApp.</p>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <h2>Resumen del pedido</h2>
+    <pre id="resumen">Cargando...</pre>
+    <p><strong>Monto a pagar:</strong> $<span id="monto">0</span></p>
+  </div>
+
+  <a href="index.html" class="btn-volver">Volver a la tienda</a>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {

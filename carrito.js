@@ -1,9 +1,8 @@
 // carrito.js
 
-// Inicializar carrito desde localStorage o vacío
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Función para revisar login
+// Comprobar login
 function checkLoginOrRedirect() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   if (!userData) {
@@ -13,7 +12,7 @@ function checkLoginOrRedirect() {
   return true;
 }
 
-// Función para actualizar carrito en pantalla, contador y localStorage
+// Actualizar carrito en pantalla
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
@@ -24,21 +23,23 @@ function updateCart() {
   let totalItems = 0;
 
   cart.forEach((item, index) => {
-    const li = document.createElement("li");
-    li.classList.add("d-flex", "justify-content-between", "align-items-center");
-
-    li.innerHTML = `
-      <span class="cart-item-name">${item.name}</span>
-      <div class="cart-item-controls">
-        <button onclick="changeQuantity(${index}, -1)">-</button>
-        <span>${item.quantity}</span>
-        <button onclick="changeQuantity(${index}, 1)">+</button>
-        <span class="cart-item-price">$${item.price * item.quantity}</span>
-        <button onclick="removeItem(${index})">Eliminar</button>
-      </div>
-    `;
-    cartList.appendChild(li);
-
+    if (cartList) {
+      const li = document.createElement("li");
+      li.style.display = "flex";
+      li.style.justifyContent = "space-between";
+      li.style.alignItems = "center";
+      li.style.marginBottom = "8px";
+      li.innerHTML = `
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span>${item.name}</span>
+          <button onclick="decreaseQty(${index})" style="padding:2px 6px;">-</button>
+          <span>${item.quantity}</span>
+          <button onclick="increaseQty(${index})" style="padding:2px 6px;">+</button>
+        </div>
+        <span>$${item.price * item.quantity}</span>
+      `;
+      cartList.appendChild(li);
+    }
     total += item.price * item.quantity;
     totalItems += item.quantity;
   });
@@ -46,16 +47,29 @@ function updateCart() {
   if (totalElem) totalElem.textContent = `Total: $${total}`;
   if (cartCount) cartCount.textContent = totalItems;
 
-  // Guardar carrito y total en localStorage
+  // Guardar en localStorage
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("montoTotal", total);
-
-  // Guardar resumen del pedido
   const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
   localStorage.setItem("resumenPedido", resumen);
 }
 
-// Función para agregar producto
+// Funciones para botones + y -
+function increaseQty(index) {
+  cart[index].quantity++;
+  updateCart();
+}
+
+function decreaseQty(index) {
+  if (cart[index].quantity > 1) {
+    cart[index].quantity--;
+  } else {
+    cart.splice(index, 1); // eliminar si llega a 0
+  }
+  updateCart();
+}
+
+// Agregar producto al carrito
 function addToCart(name, price, quantity) {
   if (!checkLoginOrRedirect()) return;
 
@@ -71,26 +85,12 @@ function addToCart(name, price, quantity) {
   updateCart();
 }
 
-// Función para eliminar producto
-function removeItem(index) {
-  cart.splice(index, 1);
-  updateCart();
-}
-
-// Función para cambiar cantidad (+/-)
-function changeQuantity(index, change) {
-  cart[index].quantity += change;
-  if (cart[index].quantity < 1) cart[index].quantity = 1;
-  updateCart();
-}
-
-// Función para enviar pedido
+// Enviar pedido
 function enviarPedido() {
   if (cart.length === 0) {
     alert("El carrito está vacío.");
     return;
   }
-
   if (!checkLoginOrRedirect()) return;
 
   const form = document.getElementById("order-form");
@@ -107,25 +107,17 @@ function enviarPedido() {
   hiddenEmail.value = userData?.email || "email@dominio.com";
   hiddenPhone.value = userData?.phone || "0000000000";
 
+  pedidoResumen.value = localStorage.getItem("resumenPedido") + `\n\nTotal: $${localStorage.getItem("montoTotal")}`;
   pagoMetodo.value = "Transferencia";
-
-  // Guardar resumen del pedido y total
-  const resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
-  const totalFinal = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
-  pedidoResumen.value = `${resumen}\n\nTotal: $${totalFinal}`;
-
-  // Guardar en localStorage para la página de gracias
-  localStorage.setItem("montoTotal", totalFinal);
-  localStorage.setItem("resumenPedido", resumen);
 
   form.submit();
 
-  // Limpiar carrito después de enviar
+  // Limpiar carrito
   cart = [];
   updateCart();
 }
 
-// Inicializar eventos al cargar la página
+// Inicializar eventos
 document.addEventListener("DOMContentLoaded", () => {
   updateCart();
 
@@ -139,7 +131,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const btnFinalizar = document.getElementById("btnFinalizar");
-  if (btnFinalizar) {
-    btnFinalizar.addEventListener("click", enviarPedido);
-  }
+  if (btnFinalizar) btnFinalizar.addEventListener("click", enviarPedido);
 });

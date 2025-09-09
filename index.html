@@ -11,31 +11,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root { --color-principal: #e1221c; --color-secundario: #F8DB5E; }
-body { font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
-h1,h2,h5,.navbar-brand { font-family: 'Alfa Slab One', cursive !important; }
-nav.navbar { box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: var(--color-principal) !important; }
-.navbar-brand { font-size: 1.6rem; color: #fff !important; letter-spacing: 2px; user-select: none; }
-#cart-count { font-size: 0.7rem; padding: 0.25em 0.5em; background-color: #fff; color: var(--color-principal); border-radius: 50%; margin-left:5px; display:inline-block; text-align:center; }
-.product-card { border-radius: 15px; overflow: hidden; box-shadow: 0 8px 15px rgba(0,0,0,0.12); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; background: white; display: flex; flex-direction: column; height: 100%; border: 3px solid var(--color-secundario); }
-.product-card:hover { transform: scale(1.03); box-shadow: 0 15px 25px var(--color-principal); border-color: var(--color-principal); z-index: 10; }
-.product-img { width: 100%; aspect-ratio: 4/3; border-bottom: 5px solid var(--color-principal); object-fit: cover; }
-.card-body { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-.card-title { font-weight: 700; color: var(--color-principal); margin-bottom: 0.5rem; font-size: 1.2rem; user-select: none; }
-.card-text { flex-grow: 1; color: #7f574c; font-size: 0.95rem; margin-bottom: 1rem; user-select: none; }
-.btn-add { background-color: var(--color-principal); border: none; font-weight: 600; font-size: 1rem; transition: background-color 0.3s ease; color: white; border-radius: 50px; padding: 8px 16px; user-select: none; }
-.btn-add:hover { background-color: #9c3a44; }
-#cart-offcanvas li { font-weight: 600; font-size: 1rem; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; background-color: #fff6c398; display: flex; justify-content: space-between; align-items: center; color: var(--color-principal); border: 2px solid var(--color-principal); flex-wrap: wrap; }
-#cart-offcanvas li button { background-color: var(--color-principal); color:white; border:none; padding:3px 8px; border-radius:5px; margin:2px; cursor:pointer; }
-#cart-offcanvas li button:hover { background-color:#9c3a44; }
-#total-offcanvas { font-size: 1.3rem; color: var(--color-principal); font-weight: 700; text-align: center; margin-top: 10px; user-select: none; }
-footer { background-color: var(--color-principal); color: var(--color-secundario); padding: 15px 0; text-align: center; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em; user-select: none; margin-top: auto; box-shadow: 0 -3px 8px rgba(203,73,85,0.5); }
-#offcanvasCarrito { width: 100%; max-width: 500px; }
-.btn-finalizar { background-color: var(--color-principal); color:white; border:none; border-radius:50px; padding:10px 18px; }
-.btn-finalizar:hover { background-color:#9c3a44; }
-@media (max-width: 992px) { .product-card { height: auto; } .card-title { font-size: 1.1rem; } .card-text { font-size: 0.9rem; } }
-@media (max-width: 768px) { .navbar-brand { font-size: 1.3rem; flex-direction: column; text-align: center; } .navbar-brand img { margin-bottom: 5px; } #cart-count { font-size: 0.65rem; } .btn-add { font-size: 0.95rem; padding: 6px 12px; } #total-offcanvas { font-size: 1.1rem; } }
-@media (max-width: 576px) { .navbar-brand { margin: 0 auto; display: flex; flex-direction: column; align-items: center; } .navbar-brand img { margin-bottom: 5px; } .navbar-toggler { position: absolute; right: 10px; top: 10px; } }
+/* Mantener tus estilos actuales... */
 </style>
 </head>
 <body>
@@ -88,7 +64,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Tradicional</h5>
           <p class="card-text">Yerba mate suave al paladar cuyo proceso de estacionada se realiza en forma natural durante 12 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000" onclick="event.stopPropagation();">Agregar al carrito - $3000</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Tradicional" data-price="3000">Agregar al carrito - $3000</button>
         </div>
       </div>
     </div>
@@ -100,7 +76,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Selección Especial</h5>
           <p class="card-text">Yerba mate con un proceso natural de estacionado que dura entre 18 y 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Selección Especial" data-price="3500">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
@@ -112,7 +88,7 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
         <div class="card-body" style="background-color:#fff6c398;">
           <h5 class="card-title">Yerba Despalada</h5>
           <p class="card-text">Yerba mate con mayor presencia de hojas y aroma intenso, estacionada naturalmente durante 24 meses.</p>
-          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500" onclick="event.stopPropagation();">Agregar al carrito - $3500</button>
+          <button class="btn btn-add add-to-cart" data-name="Yerba Despalada" data-price="3500">Agregar al carrito - $3500</button>
         </div>
       </div>
     </div>
@@ -120,7 +96,6 @@ footer { background-color: var(--color-principal); color: var(--color-secundario
   </div>
 </section>
 
-<!-- Formulario oculto Formsubmit -->
 <form id="order-form" action="https://formsubmit.co/yerbacastiello@gmail.com" method="POST" style="display:none;">
   <input type="hidden" name="_next" value="https://maty1908.github.io/castiello/gracias.html" />
   <input type="hidden" name="_captcha" value="false" />
@@ -146,33 +121,8 @@ document.querySelectorAll('.product-card').forEach(card => {
   });
 });
 
-document.querySelectorAll('.add-to-cart').forEach(button => {
-  button.addEventListener('click', (e) => {
-    e.stopPropagation(); 
-    const name = button.getAttribute('data-name');
-    const price = Number(button.getAttribute('data-price'));
-    addToCart(name, price, 1);
-  });
-});
-
-// Finalizar compra con Formsubmit
-document.getElementById("btnFinalizar").addEventListener("click", () => {
-  if(cart.length === 0) {
-    alert("Tu carrito está vacío.");
-    return;
-  }
-
-  document.getElementById("hiddenName").value = prompt("Ingrese su nombre y apellido:");
-  document.getElementById("hiddenEmail").value = prompt("Ingrese su email:");
-  document.getElementById("hiddenPhone").value = prompt("Ingrese su celular:");
-
-  let resumen = cart.map(item => `${item.quantity} x ${item.name} - $${item.price * item.quantity}`).join("\n");
-  document.getElementById("pedidoResumen").value = resumen;
-
-  document.getElementById("pagoMetodo").value = prompt("Ingrese método de pago (ej. Efectivo, Transferencia, Mercado Pago):");
-
-  document.getElementById("order-form").submit();
-});
+// Los botones de agregar al carrito ya son manejados por carrito.js
+// Botón finalizar compra usa carrito.js
 </script>
 </body>
 </html>

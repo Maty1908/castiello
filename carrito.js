@@ -1,9 +1,7 @@
 // carrito.js
 
-// Obtener carrito del localStorage o crear uno vacío
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Función para verificar si el usuario está logueado
 function checkLoginOrRedirect() {
   const userData = JSON.parse(localStorage.getItem("userData"));
   if (!userData) {
@@ -13,95 +11,113 @@ function checkLoginOrRedirect() {
   return true;
 }
 
-// Función para actualizar carrito en offcanvas y contador
 function updateCart() {
   const cartList = document.getElementById("cart-offcanvas");
   const totalElem = document.getElementById("total-offcanvas");
   const cartCount = document.getElementById("cart-count");
 
-  if (!cartList || !totalElem || !cartCount) return;
+  if (cartList) cartList.innerHTML = "";
+  let total = 0;
+  let totalItems = 0;
 
-  cartList.innerHTML = "";
+  cart.forEach((item, index) => {
+    if (cartList) {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${item.name} x ${item.quantity} - $${item.price * item.quantity}
+        <div>
+          <button onclick="removeItem(${index})">Eliminar</button>
+        </div>
+      `;
+      cartList.appendChild(li);
+    }
+    total += item.price * item.quantity;
+    totalItems += item.quantity;
+  });
 
+  if (totalElem) totalElem.textContent = `Total: $${total}`;
+  if (cartCount) cartCount.textContent = totalItems;
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("montoTotal", total);
+}
+
+function addToCart(name, price, quantity) {
+  if (!checkLoginOrRedirect()) return;
+
+  const cleanName = name.replace(/ *Castiello */gi, "").trim();
+  let existingItem = cart.find(item => item.name === cleanName);
+
+  if (existingItem) {
+    existingItem.quantity += quantity;
+  } else {
+    cart.push({ name: cleanName, price, quantity });
+  }
+
+  updateCart();
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+function enviarPedido() {
   if (cart.length === 0) {
-    cartList.innerHTML = "<li>Tu carrito está vacío</li>";
-    totalElem.textContent = "Total: $0";
-    cartCount.textContent = "0";
+    alert("El carrito está vacío.");
     return;
   }
 
-  let total = 0;
-  let totalQuantity = 0;
+  if (!checkLoginOrRedirect()) return;
 
-  cart.forEach((item, index) => {
-    const itemTotal = item.price * item.quantity;
-    total += itemTotal;
-    totalQuantity += item.quantity;
+  const form = document.getElementById("order-form");
+  if (!form) return;
 
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <span>${item.name} x ${item.quantity}</span>
-      <span>$${itemTotal.toFixed(2)}</span>
-      <button onclick="removeItem(${index})">Eliminar</button>
-    `;
-    cartList.appendChild(li);
-  });
+  const hiddenName = document.getElementById("hiddenName");
+  const hiddenEmail = document.getElementById("hiddenEmail");
+  const hiddenPhone = document.getElementById("hiddenPhone");
+  const pedidoResumen = document.getElementById("pedidoResumen");
+  const pagoMetodo = document.getElementById("pagoMetodo");
 
-  totalElem.textContent = `Total: $${total.toFixed(2)}`;
-  cartCount.textContent = totalQuantity;
-}
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  hiddenName.value = userData?.name || "Cliente Anónimo";
+  hiddenEmail.value = userData?.email || "email@dominio.com";
+  hiddenPhone.value = userData?.phone || "0000000000";
 
-// Función para agregar producto al carrito
-function addToCart(product) {
-  const existing = cart.find(item => item.id === product.id);
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
+  pagoMetodo.value = "Transferencia";
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
-}
+  let totalFinal = 0;
+  const resumen = cart.map(item => {
+    const subtotal = item.price * item.quantity;
+    totalFinal += subtotal;
+    return `${item.quantity} x ${item.name} - $${subtotal}`;
+  }).join("\n");
 
-// Función para eliminar un producto del carrito
-function removeItem(index) {
-  cart.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
-}
+  localStorage.setItem("montoTotal", totalFinal);
+  localStorage.setItem("resumenPedido", resumen);
 
-// Función para limpiar todo el carrito
-function clearCart() {
+  pedidoResumen.value = `${resumen}\n\nTotal: $${totalFinal}`;
+
+  form.submit();
+
   cart = [];
-  localStorage.setItem("cart", JSON.stringify(cart));
   updateCart();
 }
 
-// Inicializar botones "Agregar al carrito" del index.html
-function initAddToCartButtons() {
-  const buttons = document.querySelectorAll('.add-to-cart');
+document.addEventListener("DOMContentLoaded", () => {
+  updateCart();
 
-  buttons.forEach((btn, index) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation(); // evita redirección del card
-      const name = btn.getAttribute('data-name');
-      const price = parseFloat(btn.getAttribute('data-price'));
-      const id = index + 1; // id único para cada producto del index
-
-      addToCart({ id, name, price });
-
-      // Abrir offcanvas automáticamente
-      const offcanvasEl = document.getElementById('offcanvasCarrito');
-      const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
-      bsOffcanvas.show();
+  document.querySelectorAll(".add-to-cart").forEach(button => {
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const name = button.getAttribute("data-name");
+      const price = Number(button.getAttribute("data-price"));
+      addToCart(name, price, 1);
     });
   });
-}
 
-// Inicializar al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-  checkLoginOrRedirect();
-  updateCart();
-  initAddToCartButtons();
+  const btnFinalizar = document.getElementById("btnFinalizar");
+  if (btnFinalizar) {
+    btnFinalizar.addEventListener("click", enviarPedido);
+  }
 });
